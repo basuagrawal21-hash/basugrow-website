@@ -19,7 +19,7 @@ export const site = {
     whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '917400841035',
     /** Human-readable, for display. */
     phoneDisplay: '+91 74008 41035',
-    email: 'hello@basugrow.com',
+    email: 'basugrowthmarketing@gmail.com',
     instagram: 'basugrow',
     instagramUrl: 'https://instagram.com/basugrow',
     /** Shown next to forms and on the contact page. Keep it true. */
@@ -49,7 +49,7 @@ export const nav = [
   { label: 'Work', href: '/work' },
   { label: 'Process', href: '/#how-it-works' },
   { label: 'Pricing', href: '/pricing' },
-  { label: 'Resources', href: '/tools/cpl-calculator' },
+  { label: 'Resources', href: '/tools' },
   { label: 'Contact', href: '/contact' },
 ] as const;
 
