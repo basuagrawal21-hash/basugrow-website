@@ -73,17 +73,54 @@ const offY = Math.round((size - h) / 2);
 
 const out = new PNG({ width: size, height: size });
 out.data.fill(0);
+// Kept so the painted variants below do not have to recompute coverage.
+const maskAlpha = new Uint8Array(size * size);
 
 for (let y = 0; y < h; y++) {
   for (let x = 0; x < w; x++) {
     const a = Math.round(Math.max(0, Math.min(1, coverage(minX + x, minY + y))) * 255);
-    const o = ((y + offY) * size + (x + offX)) * 4;
+    const pixel = (y + offY) * size + (x + offX);
+    const o = pixel * 4;
     out.data[o] = 255;
     out.data[o + 1] = 255;
     out.data[o + 2] = 255;
     out.data[o + 3] = a;
+    maskAlpha[pixel] = a;
   }
 }
 
 fs.writeFileSync('public/logo-mark-mask.png', PNG.sync.write(out));
 console.log(`trimmed ${width}x${height} -> ${size}x${size}, wrote public/logo-mark-mask.png`);
+
+/**
+ * Also emit painted PNGs for contexts that cannot use a CSS mask: the Open
+ * Graph card and the favicon, both rendered by Satori/ImageResponse.
+ */
+const paint = (hex, bg) => {
+  const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+  const out = new PNG({ width: size, height: size });
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const i = (y * size + x) * 4;
+      // Alpha was written into the mask above; re-read it from that buffer.
+      const a = maskAlpha[y * size + x];
+      if (bg) {
+        const [br, bg2, bb] = [1, 3, 5].map((k) => parseInt(bg.slice(k, k + 2), 16));
+        const t = a / 255;
+        out.data[i] = Math.round(r * t + br * (1 - t));
+        out.data[i + 1] = Math.round(g * t + bg2 * (1 - t));
+        out.data[i + 2] = Math.round(b * t + bb * (1 - t));
+        out.data[i + 3] = 255;
+      } else {
+        out.data[i] = r;
+        out.data[i + 1] = g;
+        out.data[i + 2] = b;
+        out.data[i + 3] = a;
+      }
+    }
+  }
+  return out;
+};
+
+fs.writeFileSync('public/logo-mark-willow.png', PNG.sync.write(paint('#8ACB88', null)));
+console.log('wrote public/logo-mark-willow.png');

@@ -9,6 +9,7 @@ import { Icon } from '@/components/ui/icon';
 import { services, getService } from '@/content/services';
 import { whatsappLink } from '@/content/site';
 import { pageMetadata } from '@/lib/seo';
+import { ServiceLd, FaqLd, BreadcrumbLd } from '@/components/seo/json-ld';
 
 export function generateStaticParams() {
   return services.map((s) => ({ slug: s.slug }));
@@ -32,6 +33,19 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
 
   return (
     <>
+      <ServiceLd
+        name={service.name}
+        description={service.summary}
+        path={`/services/${service.slug}`}
+      />
+      <FaqLd items={service.faqs} />
+      <BreadcrumbLd
+        items={[
+          { name: 'Home', path: '/' },
+          { name: 'Services', path: '/services' },
+          { name: service.name, path: `/services/${service.slug}` },
+        ]}
+      />
       <PageHero
         eyebrow={service.name}
         title={service.heroHeadline}

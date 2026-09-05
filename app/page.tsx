@@ -10,12 +10,15 @@ import { Testimonials } from '@/components/sections/testimonials';
 import { PricingTable } from '@/components/sections/pricing-table';
 import { FaqSection } from '@/components/sections/faq-section';
 import { FinalCta } from '@/components/sections/final-cta';
+import { FaqLd } from '@/components/seo/json-ld';
+import { homeFaqs } from '@/content/faqs';
 
 /* Surfaces alternate: night, bone, bone, sand, bone, NIGHT, bone, sand, bone,
    sand, bone, NIGHT. Three dark sections on the page, no more. */
 export default function HomePage() {
   return (
     <>
+      <FaqLd items={homeFaqs} />
       <Hero />
       <TrustBar />
       <Problem />

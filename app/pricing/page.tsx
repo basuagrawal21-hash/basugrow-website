@@ -4,6 +4,7 @@ import { FaqSection } from '@/components/sections/faq-section';
 import { FinalCta } from '@/components/sections/final-cta';
 import { pricingFaqs } from '@/content/faqs';
 import { pageMetadata } from '@/lib/seo';
+import { FaqLd } from '@/components/seo/json-ld';
 
 export const metadata = pageMetadata({
   title: 'Pricing',
@@ -15,6 +16,7 @@ export const metadata = pageMetadata({
 export default function PricingPage() {
   return (
     <>
+      <FaqLd items={pricingFaqs} />
       <PageHero
         eyebrow="Pricing"
         title="Published, so you don't have to sit through a call to find out"

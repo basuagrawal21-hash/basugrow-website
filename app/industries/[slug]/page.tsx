@@ -9,6 +9,7 @@ import { industries, getIndustry } from '@/content/industries';
 import { getCaseStudy } from '@/content/case-studies';
 import { whatsappLink } from '@/content/site';
 import { pageMetadata } from '@/lib/seo';
+import { BreadcrumbLd } from '@/components/seo/json-ld';
 
 export function generateStaticParams() {
   return industries.map((i) => ({ slug: i.slug }));
@@ -34,6 +35,13 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
 
   return (
     <>
+      <BreadcrumbLd
+        items={[
+          { name: 'Home', path: '/' },
+          { name: 'Industries', path: '/industries' },
+          { name: industry.name, path: `/industries/${industry.slug}` },
+        ]}
+      />
       <PageHero
         eyebrow={`Meta ads for ${industry.name.toLowerCase()}`}
         title={industry.heroHeadline}

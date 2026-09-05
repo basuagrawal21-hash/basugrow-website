@@ -5,6 +5,7 @@ import { SiteHeader } from '@/components/sections/site-header';
 import { SiteFooter } from '@/components/sections/site-footer';
 import { SmoothScroll } from '@/components/motion/smooth-scroll';
 import { FloatingActions, ScrollProgress } from '@/components/ui/floating-actions';
+import { OrganizationLd } from '@/components/seo/json-ld';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           Skip to content
         </a>
+        <OrganizationLd />
         <SmoothScroll />
         <ScrollProgress />
         <SiteHeader />
