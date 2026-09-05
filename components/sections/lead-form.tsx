@@ -59,7 +59,7 @@ function Submit() {
     <button
       type="submit"
       disabled={pending}
-      className="btn-sheen bg-gold text-ink hover:bg-[#FFD37A] inline-flex h-14 w-full items-center justify-center rounded-full px-7 text-[1.0625rem] font-medium transition-colors disabled:opacity-70 sm:w-auto"
+      className="btn-sheen bg-gold text-ink inline-flex h-14 w-full items-center justify-center rounded-full px-7 text-[1.0625rem] font-medium transition-colors hover:bg-[#FFD37A] disabled:opacity-70 sm:w-auto"
     >
       {pending ? 'Sending…' : 'Send and get my free audit'}
     </button>
@@ -170,10 +170,12 @@ export function LeadForm() {
           )}
         </Field>
 
+        {/* The qualifier lives in the label, not a hint line. As a hint it sat
+            between the label and the control and pushed this select a line
+            lower than the one beside it. */}
         <Field
-          label="Monthly ad budget"
+          label="Monthly ad budget (roughly is fine)"
           name="budget"
-          hint="Roughly is fine."
           error={state.errors?.budget}
         >
           {({ id, describedBy, invalid }) => (
