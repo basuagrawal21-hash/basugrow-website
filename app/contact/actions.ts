@@ -1,9 +1,10 @@
 'use server';
 
-import { headers } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { leadSchema, type LeadFormState } from '@/lib/lead-schema';
 import { checkRateLimit } from '@/lib/rate-limit';
+import { sendLeadToMeta } from '@/lib/meta-capi';
 import { site } from '@/content/site';
 
 /**
@@ -104,6 +105,20 @@ export async function submitLead(
     }
   }
 
+  // Server-side Lead conversion. Shares an event id with the browser pixel on
+  // /thank-you so Meta deduplicates the pair rather than counting two leads.
+  const eventId = crypto.randomUUID();
+  const cookieStore = await cookies();
+  await sendLeadToMeta({
+    eventId,
+    eventSourceUrl: `${site.url}/contact`,
+    phone: data.whatsapp,
+    clientIp: ip,
+    userAgent: headerList.get('user-agent') ?? undefined,
+    fbc: cookieStore.get('_fbc')?.value,
+    fbp: cookieStore.get('_fbp')?.value,
+  });
+
   // Optional Google Sheets append. A failure here must never cost the lead,
   // because the email has already gone.
   const sheetsUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
@@ -119,5 +134,5 @@ export async function submitLead(
     }
   }
 
-  redirect('/thank-you');
+  redirect(`/thank-you?ev=${eventId}`);
 }

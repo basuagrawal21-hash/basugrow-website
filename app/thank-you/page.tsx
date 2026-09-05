@@ -4,6 +4,7 @@ import { PageHero } from '@/components/sections/page-hero';
 import { Section } from '@/components/ui/section';
 import { site, whatsappLink } from '@/content/site';
 import { pageMetadata } from '@/lib/seo';
+import { LeadEvent } from '@/components/tracking/lead-event';
 
 export const metadata = {
   ...pageMetadata({
@@ -30,9 +31,18 @@ const steps = [
   },
 ];
 
-export default function ThankYouPage() {
+export default async function ThankYouPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ ev?: string }>;
+}) {
+  // Passed by the server action so the browser pixel can deduplicate against
+  // the Conversions API event. It is a random id, not personal data.
+  const { ev } = await searchParams;
+
   return (
     <>
+      <LeadEvent eventId={ev} />
       <PageHero
         eyebrow="Enquiry received"
         title="Got it. We'll be in touch shortly."
