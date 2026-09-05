@@ -90,7 +90,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <Button href="/contact" variant="gold" size="md" magnetic>
+          <Button href="/contact" variant="gold" size="md" magnetic className="btn-sheen">
             Free ad audit
           </Button>
         </div>

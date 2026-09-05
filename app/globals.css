@@ -232,3 +232,166 @@
     transition: none;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Pointer-reactive hero.
+
+   Everything here reads the custom properties written by <PointerField/>:
+   --px/--py (pixels), --pxn/--pyn (-1..1), --pointer (0|1). No effect below
+   costs a listener of its own, and all of them animate transform or opacity.
+
+   The transitions are deliberately long. The pointer variables update every
+   frame, so a 500-700ms transition turns each frame's new target into a soft
+   trailing lag rather than a twitch that follows the cursor exactly — that lag
+   is most of the difference between "premium" and "gimmick".
+--------------------------------------------------------------------------- */
+
+@layer components {
+  /* Dot grid, from the brand's own creatives. Two copies of the same pattern:
+     one always faintly present, one brighter and revealed only around the
+     pointer through a mask. */
+  .hero-dots {
+    background-image: radial-gradient(circle, var(--color-willow) 1.5px, transparent 1.5px);
+    background-size: 26px 26px;
+    background-position: center;
+  }
+
+  /* Whisper-faint at rest: texture, not pattern. */
+  .hero-dots-base {
+    opacity: 0.06;
+  }
+
+  /* Clearly visible where the pointer is, so the interaction is noticed. */
+  .hero-dots-lit {
+    opacity: calc(var(--pointer, 0) * 0.65);
+    transition: opacity 500ms var(--ease-brand);
+    -webkit-mask-image: radial-gradient(
+      260px circle at var(--px, 50%) var(--py, 50%),
+      #000 0%,
+      rgb(0 0 0 / 0.4) 45%,
+      transparent 72%
+    );
+    mask-image: radial-gradient(
+      260px circle at var(--px, 50%) var(--py, 50%),
+      #000 0%,
+      rgb(0 0 0 / 0.4) 45%,
+      transparent 72%
+    );
+  }
+
+  /* Headline lines drift by a few pixels, each a little more than the one
+     above it. Reads as depth rather than as movement. */
+  .hero-drift {
+    display: inline-block;
+    transform: translate3d(calc(var(--pxn, 0) * var(--drift, 4px)), 0, 0);
+    transition: transform 700ms var(--ease-brand);
+    will-change: transform;
+  }
+
+  /* The phone frame leans toward the pointer. 4 degrees, no more. */
+  .hero-tilt {
+    transform: perspective(1200px) rotateY(calc(var(--pxn, 0) * 4deg))
+      rotateX(calc(var(--pyn, 0) * -4deg)) translate3d(0, 0, 0);
+    transform-style: preserve-3d;
+    transition: transform 600ms var(--ease-brand);
+    will-change: transform;
+  }
+
+  /* A light band sweeps across the gold CTA once on hover. */
+  .btn-sheen {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .btn-sheen::after {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: -40%;
+    z-index: -1;
+    width: 40%;
+    background: linear-gradient(
+      100deg,
+      transparent,
+      color-mix(in srgb, #fff 62%, transparent),
+      transparent
+    );
+    transform: translate3d(-100%, 0, 0) skewX(-18deg);
+    transition: transform 750ms var(--ease-brand);
+  }
+
+  .btn-sheen:hover::after,
+  .btn-sheen:focus-visible::after {
+    transform: translate3d(520%, 0, 0) skewX(-18deg);
+  }
+
+  /* Trust row: a willow rule wipes under the item on hover. */
+  .trust-item {
+    position: relative;
+  }
+
+  .trust-item::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: -0.35rem;
+    height: 1px;
+    background-color: var(--color-willow);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 400ms var(--ease-brand);
+  }
+
+  .trust-item:hover::after {
+    transform: scaleX(1);
+  }
+}
+
+/* With the preference set the pointer field never attaches, so the variables
+   stay at their defaults and every transform above resolves to its rest state.
+   The hover transitions collapse to instant via the global reduced-motion rule. */
+@media (prefers-reduced-motion: reduce) {
+  .hero-drift,
+  .hero-tilt {
+    transform: none;
+  }
+
+  .hero-dots-lit {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Hero gold marker.
+
+   Deliberately CSS rather than JS. The marker is the only thing making the
+   word on top of it readable — it is ink-coloured text on a pine background —
+   so its resting state must be "visible" and it must not depend on hydration.
+   A JS animation starting at scaleX(0) renders an invisible word in the SSR
+   HTML, which is wrong for crawlers and broken if the script never runs.
+--------------------------------------------------------------------------- */
+
+@layer components {
+  .hero-marker {
+    transform-origin: left center;
+    transform: skewX(-4deg) scaleX(1);
+    animation: marker-wipe 450ms var(--ease-brand) 480ms both;
+  }
+}
+
+@keyframes marker-wipe {
+  from {
+    transform: skewX(-4deg) scaleX(0);
+  }
+  to {
+    transform: skewX(-4deg) scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-marker {
+    animation: none;
+    transform: skewX(-4deg) scaleX(1);
+  }
+}
