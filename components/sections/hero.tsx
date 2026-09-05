@@ -53,7 +53,7 @@ export function Hero() {
       <div
         aria-hidden
         className="pointer-events-none absolute -top-40 -right-40 -z-10 h-[36rem] w-[36rem] rounded-full opacity-[0.07] blur-3xl"
-        style={{ background: 'var(--color-bone)' }}
+        style={{ background: 'var(--color-willow)' }}
       />
 
       <div className="container-page relative z-10">
@@ -67,16 +67,16 @@ export function Hero() {
             <motion.p
               variants={line}
               transition={transition}
-              className="text-bone/60 mb-6 flex flex-wrap items-center gap-x-2.5 gap-y-2 text-xs font-semibold tracking-[0.14em] uppercase"
+              className="text-willow mb-6 flex flex-wrap items-center gap-x-2.5 gap-y-2 text-xs font-semibold tracking-[0.14em] uppercase"
             >
-              <span aria-hidden className="bg-bone/35 h-px w-6" />
+              <span aria-hidden className="bg-willow/50 h-px w-6" />
               Meta ads
-              <span aria-hidden className="text-bone/30">
+              <span aria-hidden className="text-willow/40">
                 ·
               </span>
               Clients across India
               {/* Third item is dropped on narrow screens so the eyebrow holds one line. */}
-              <span aria-hidden className="text-bone/30 hidden sm:inline">
+              <span aria-hidden className="text-willow/40 hidden sm:inline">
                 ·
               </span>
               <span className="hidden sm:inline">Based in {site.base.city}</span>

@@ -20,9 +20,9 @@ export function IndustriesGrid() {
           <li key={industry.slug}>
             <Link
               href={`/industries/${industry.slug}`}
-              className="border-ink/12 text-ink hover:border-ink/30 hover:bg-sand inline-flex items-center gap-2.5 rounded-full border-[1.5px] px-5 py-3 text-[1rem] font-medium transition-colors duration-200"
+              className="border-moss/20 text-ink hover:border-moss/45 hover:bg-moss/[0.06] inline-flex items-center gap-2.5 rounded-full border-[1.5px] px-5 py-3 text-[1rem] font-medium transition-colors duration-200"
             >
-              <Icon name={industry.icon} size={18} className="text-slate" />
+              <Icon name={industry.icon} size={18} className="text-moss" />
               {industry.name}
             </Link>
           </li>

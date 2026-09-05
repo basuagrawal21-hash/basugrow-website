@@ -25,7 +25,7 @@ export function ServicesGrid() {
                 href={`/services/${service.slug}`}
                 className="group/card flex h-full flex-col p-7 focus:outline-none"
               >
-                <span className="bg-ink/[0.04] text-ink grid h-11 w-11 place-items-center rounded-xl">
+                <span className="bg-moss/[0.08] text-moss grid h-11 w-11 place-items-center rounded-xl">
                   <Icon name={service.icon} />
                 </span>
                 <h3 className="text-ink mt-6 text-[1.25rem]">{service.name}</h3>

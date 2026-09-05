@@ -39,7 +39,7 @@ export function ToolsTeaser() {
           <li key={tool.href}>
             <SpotlightCard className="bg-bone h-full">
               <Link href={tool.href} className="group/tool block h-full p-8 focus:outline-none">
-                <span className="bg-ink/[0.04] text-ink grid h-11 w-11 place-items-center rounded-xl">
+                <span className="bg-moss/[0.08] text-moss grid h-11 w-11 place-items-center rounded-xl">
                   <tool.icon size={22} strokeWidth={1.75} aria-hidden />
                 </span>
                 <h3 className="text-ink mt-6 text-[1.25rem]">{tool.title}</h3>

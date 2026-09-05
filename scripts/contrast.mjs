@@ -4,13 +4,14 @@
  * Anything that carries body text must reach 4.5:1, large text 3:1.
  */
 const P = {
-  bone: '#F6F5F1',
-  sand: '#ECEAE4',
-  night: '#171613',
-  ink: '#1B1A17',
-  slate: '#6B6761',
-  gold: '#FFBF46',
+  bone: '#F7F5EF',
+  sand: '#EBE7DC',
+  night: '#0C1B15',
+  ink: '#14201A',
+  slate: '#5C6862',
+  moss: '#2E5F49',
   willow: '#8ACB88',
+  gold: '#FFBF46',
 };
 
 const channels = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255);
@@ -25,15 +26,17 @@ const ratio = (a, b) => {
 };
 
 const pairs = [
-  ['ink', 'bone', 'body and headings on the page'],
+  ['ink', 'bone', 'headings and body on the page'],
   ['slate', 'bone', 'captions on the page'],
   ['ink', 'sand', 'body on the tinted surface'],
   ['slate', 'sand', 'captions on the tint'],
-  ['bone', 'night', 'body on dark sections'],
-  ['willow', 'night', 'green accents on dark'],
+  ['bone', 'night', 'body on dark blocks'],
+  ['moss', 'bone', 'green on cream — safe for text'],
+  ['willow', 'night', 'green on dark — safe for text'],
   ['gold', 'night', 'gold on dark'],
-  ['ink', 'gold', 'text on gold buttons'],
-  ['willow', 'bone', 'green must never carry text on light'],
+  ['ink', 'gold', 'text on gold CTAs'],
+  ['ink', 'willow', 'text on a green fill'],
+  ['willow', 'bone', 'willow must never sit on cream — use moss'],
   ['gold', 'bone', 'gold is a fill, never text on light'],
 ];
 

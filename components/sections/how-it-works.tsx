@@ -21,19 +21,19 @@ export function HowItWorks() {
         {/* Connecting rule, desktop only. Sits behind the numbers. */}
         <div
           aria-hidden
-          className="bg-ink/12 absolute top-6 right-0 left-0 hidden h-px md:block"
+          className="bg-moss/20 absolute top-6 right-0 left-0 hidden h-px md:block"
         />
 
         {processSteps.map((step) => (
           <li key={step.n} className="relative flex gap-5 md:block">
             <div className="flex flex-col items-center md:block">
-              <span className="bg-ink text-bone tnum relative z-10 grid h-12 w-12 shrink-0 place-items-center rounded-full text-[1.0625rem] font-extrabold">
+              <span className="bg-moss text-bone tnum relative z-10 grid h-12 w-12 shrink-0 place-items-center rounded-full text-[1.0625rem] font-extrabold">
                 {step.n}
               </span>
               {/* Vertical rule for the mobile timeline. */}
               <span
                 aria-hidden
-                className="bg-ink/12 mt-2 w-px flex-1 last:hidden md:hidden"
+                className="bg-moss/20 mt-2 w-px flex-1 last:hidden md:hidden"
               />
             </div>
             <div className="pb-2 md:mt-6 md:pr-6">

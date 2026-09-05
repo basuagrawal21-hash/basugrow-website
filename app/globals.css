@@ -2,38 +2,46 @@
 
 /* ---------------------------------------------------------------------------
    BasuGrow design tokens.
-   Warm neutral surfaces, one gold accent, and the brand green kept for the
-   logo and small marks only — green is the mark, not the wallpaper.
-   Bone is the dominant surface; night is punctuation — hero, results and the
-   final CTA. Nothing else.
+
+   Green is the brand, so it lives on every surface — but at the value each
+   surface can carry. Moss is the deep green that stays legible on cream;
+   willow is the bright green that only works on dark. Neither is ever a
+   wallpaper: the surfaces themselves are warm cream and deep forest.
+
+   Cream is the page. Dark is punctuation — the hero, one results block and
+   the closing CTA.
 --------------------------------------------------------------------------- */
 
 @theme {
   /* Palette.
 
-     Green is the brand, not the wallbone. It appears in the logo, small
-     icons and thin rules — nowhere else. Surfaces are warm neutrals so the
-     one green thing on screen is the mark itself. */
-  --color-night: #171613; /* dark section backgrounds */
-  --color-bone: #f6f5f1; /* default page background */
-  --color-sand: #eceae4; /* tinted surface, card fill */
-  --color-ink: #1b1a17; /* headings and body on light */
-  --color-slate: #6b6761; /* muted and secondary text */
-  --color-gold: #ffbf46; /* the accent: CTAs + one highlighter per screen */
-  --color-willow: #8acb88; /* brand green: logo, icons, rules. Never text on light. */
+     Two greens, because one green cannot serve both surfaces. Moss reads as
+     a tinted near-black on cream and passes for body text; willow is far too
+     light for cream but sings on the dark. Using the right one per surface is
+     what lets the brand colour appear everywhere without shouting. */
+  --color-night: #0c1b15; /* deep forest. Reads black, has green in it. */
+  --color-bone: #f7f5ef; /* warm cream page background */
+  --color-sand: #ebe7dc; /* deeper warm tint for alternating sections */
+  --color-ink: #14201a; /* headings and body on light */
+  --color-slate: #5c6862; /* muted and secondary text */
+  --color-moss: #2e5f49; /* brand green FOR LIGHT surfaces. Safe for text. */
+  --color-willow: #8acb88; /* brand green FOR DARK surfaces. Never on light. */
+  --color-gold: #ffbf46; /* the accent: CTAs and one highlighter per screen */
 
   /*
     Contrast, measured with scripts/contrast.mjs, not estimated:
-      ink/bone       15.95:1   body and headings on the page   AA + AAA
-      slate/bone      5.15:1   captions on the page            AA
-      ink/sand       14.47:1   body on the tinted surface      AA + AAA
-      slate/sand      4.67:1   captions on the tint            AA
-      bone/night     16.59:1   body on dark sections           AA + AAA
-      willow/night    9.46:1   green accents on dark           AA + AAA
-      gold/night     11.02:1   gold on dark                    AA + AAA
-      ink/gold       10.60:1   text on gold buttons            AA + AAA
-      willow/bone     1.75:1   FAILS - green never carries text on light
-      gold/bone       1.50:1   FAILS - gold is a fill, never text on light
+      ink/bone       15.39:1   headings and body on the page   AA + AAA
+      slate/bone      5.33:1   captions on the page            AA
+      ink/sand       13.58:1   body on the tinted surface      AA + AAA
+      slate/sand      4.71:1   captions on the tint            AA
+      bone/night     16.28:1   body on dark blocks             AA + AAA
+      moss/bone       6.76:1   green on cream — safe for text  AA
+      willow/night    9.28:1   green on dark — safe for text   AA + AAA
+      gold/night     10.81:1   gold on dark                    AA + AAA
+      ink/gold       10.22:1   text on gold CTAs               AA + AAA
+      ink/willow      8.77:1   text on a green fill            AA + AAA
+      willow/bone     1.75:1   FAILS — willow never on cream, use moss
+      gold/bone       1.50:1   FAILS — gold is a fill, never text on light
   */
 
   --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
@@ -255,7 +263,7 @@
      one always faintly present, one brighter and revealed only around the
      pointer through a mask. */
   .hero-dots {
-    background-image: radial-gradient(circle, var(--color-bone) 1.5px, transparent 1.5px);
+    background-image: radial-gradient(circle, var(--color-willow) 1.5px, transparent 1.5px);
     background-size: 26px 26px;
     background-position: center;
   }

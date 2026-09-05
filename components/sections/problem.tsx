@@ -20,7 +20,7 @@ export function Problem() {
       <ol className="mt-14 grid gap-x-14 gap-y-12 md:grid-cols-2">
         {failureModes.map((mode, i) => (
           <li key={mode.wrong} className="border-ink/10 border-t pt-6">
-            <p className="text-slate/60 tnum text-[0.875rem] font-semibold">
+            <p className="text-moss/70 tnum text-[0.875rem] font-semibold">
               {String(i + 1).padStart(2, '0')}
             </p>
             <h3 className="text-ink mt-3 text-[length:var(--text-md)]">{mode.wrong}</h3>
