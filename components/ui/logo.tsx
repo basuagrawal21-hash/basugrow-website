@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
  * The mark is the real BasuGrow logo, lifted from a brand creative by
  * scripts/extract-logo.mjs and stored as an alpha mask. It is painted with
  * `background-color: currentColor` through a CSS mask, so one file serves both
- * the willow-on-pine and forest-on-paper variants and always matches the token.
+ * the willow-on-night and ink-on-bone variants and always matches the token.
  *
  * TODO(brand): swap in the original vector when it is supplied — drop an SVG at
  * public/logo-mark.svg and point `maskImage` at it. The mask approach keeps
@@ -38,7 +38,7 @@ export function Logo({
   showWordmark = true,
 }: {
   className?: string;
-  /** 'light' = for pine backgrounds. 'dark' = for paper backgrounds. */
+  /** 'light' = for night backgrounds. 'dark' = for bone backgrounds. */
   tone?: 'light' | 'dark';
   showWordmark?: boolean;
 }) {
@@ -48,12 +48,12 @@ export function Logo({
       className={cn('inline-flex items-center gap-2.5 rounded-lg', className)}
       aria-label="BasuGrow — home"
     >
-      <LogoMark className={cn('h-9 w-9', tone === 'light' ? 'text-willow' : 'text-forest')} />
+      <LogoMark className={cn('h-9 w-9', tone === 'light' ? 'text-willow' : 'text-ink')} />
       {showWordmark && (
         <span
           className={cn(
             'font-display text-[1.375rem] font-extrabold tracking-[-0.04em]',
-            tone === 'light' ? 'text-paper' : 'text-forest',
+            tone === 'light' ? 'text-bone' : 'text-ink',
           )}
         >
           BasuGrow

@@ -34,7 +34,7 @@ export function Hero() {
     : { duration: 0.6, ease: [0.2, 0.8, 0.2, 1] as const };
 
   return (
-    <section className="bg-pine relative isolate overflow-hidden pt-28 pb-16 md:pt-32 md:pb-20">
+    <section className="bg-night relative isolate overflow-hidden pt-28 pb-16 md:pt-32 md:pb-20">
       <PointerField />
       <CursorGlow size={520} opacity={0.09} />
 
@@ -49,11 +49,11 @@ export function Hero() {
         className="hero-dots hero-dots-lit pointer-events-none absolute inset-0 -z-10"
       />
 
-      {/* Static willow wash in the top-right so the section is never flat. */}
+      {/* Static warm wash in the top-right so the section is never flat. */}
       <div
         aria-hidden
         className="pointer-events-none absolute -top-40 -right-40 -z-10 h-[36rem] w-[36rem] rounded-full opacity-[0.07] blur-3xl"
-        style={{ background: 'var(--color-willow)' }}
+        style={{ background: 'var(--color-bone)' }}
       />
 
       <div className="container-page relative z-10">
@@ -67,22 +67,22 @@ export function Hero() {
             <motion.p
               variants={line}
               transition={transition}
-              className="text-willow mb-6 flex flex-wrap items-center gap-x-2.5 gap-y-2 text-xs font-semibold tracking-[0.14em] uppercase"
+              className="text-bone/60 mb-6 flex flex-wrap items-center gap-x-2.5 gap-y-2 text-xs font-semibold tracking-[0.14em] uppercase"
             >
-              <span aria-hidden className="bg-willow/60 h-px w-6" />
+              <span aria-hidden className="bg-bone/35 h-px w-6" />
               Meta ads
-              <span aria-hidden className="text-willow/40">
+              <span aria-hidden className="text-bone/30">
                 ·
               </span>
               Clients across India
               {/* Third item is dropped on narrow screens so the eyebrow holds one line. */}
-              <span aria-hidden className="text-willow/40 hidden sm:inline">
+              <span aria-hidden className="text-bone/30 hidden sm:inline">
                 ·
               </span>
               <span className="hidden sm:inline">Based in {site.base.city}</span>
             </motion.p>
 
-            <h1 className="text-paper text-[length:var(--text-4xl)] leading-[0.95]">
+            <h1 className="text-bone text-[length:var(--text-4xl)] leading-[0.95]">
               {HEADLINE.map((text, i) => (
                 <motion.span key={text} variants={line} transition={transition} className="block">
                   <span
@@ -115,7 +115,7 @@ export function Hero() {
             <motion.p
               variants={line}
               transition={transition}
-              className="text-paper/75 mt-6 max-w-[36rem] text-[length:var(--text-base)]"
+              className="text-bone/75 mt-6 max-w-[36rem] text-[length:var(--text-base)]"
             >
               BasuGrow runs Meta ads for gyms, clinics, salons and local businesses across India —
               and sends every qualified enquiry straight to your phone.
@@ -150,7 +150,7 @@ export function Hero() {
             <motion.ul
               variants={line}
               transition={transition}
-              className="border-willow/15 text-paper/60 mt-9 flex flex-col gap-x-6 gap-y-2.5 border-t pt-5 text-[0.9375rem] sm:flex-row sm:flex-wrap"
+              className="border-bone/15 text-bone/55 mt-9 flex flex-col gap-x-6 gap-y-2.5 border-t pt-5 text-[0.9375rem] sm:flex-row sm:flex-wrap"
             >
               {trustRow.map((item) => (
                 <li key={item} className="trust-item flex items-center gap-2">

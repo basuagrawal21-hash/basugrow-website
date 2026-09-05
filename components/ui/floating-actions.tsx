@@ -18,7 +18,7 @@ export function ScrollProgress() {
   return (
     <motion.div
       aria-hidden
-      className="fixed inset-x-0 top-0 z-[60] h-[3px] origin-left bg-willow"
+      className="bg-willow fixed inset-x-0 top-0 z-[60] h-[3px] origin-left"
       style={{ scaleX: reduced ? scrollYProgress : scaleX }}
     />
   );
@@ -35,7 +35,7 @@ export function FloatingActions() {
           type="button"
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           aria-label="Back to top"
-          className="pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-full border-[1.5px] border-forest/20 bg-paper text-forest shadow-none transition-colors hover:bg-mint"
+          className="border-ink/20 bg-bone text-ink hover:bg-sand pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-full border-[1.5px] shadow-none transition-colors"
         >
           <ArrowUp size={18} aria-hidden />
         </button>
@@ -45,7 +45,7 @@ export function FloatingActions() {
         href={whatsappLink()}
         target="_blank"
         rel="noopener noreferrer"
-        className="pointer-events-auto inline-flex h-14 items-center gap-2.5 rounded-full bg-forest px-5 font-medium text-paper transition-colors hover:bg-pine md:hidden"
+        className="bg-ink text-bone hover:bg-night pointer-events-auto inline-flex h-14 items-center gap-2.5 rounded-full px-5 font-medium transition-colors md:hidden"
         aria-label={`Message ${site.name} on WhatsApp`}
       >
         <MessageCircle size={20} aria-hidden />

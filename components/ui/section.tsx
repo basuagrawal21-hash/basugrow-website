@@ -2,21 +2,21 @@ import { type ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import { CursorGlow } from '@/components/motion/cursor-glow';
 
-type Surface = 'paper' | 'mint' | 'pine';
+type Surface = 'bone' | 'sand' | 'night';
 
 const surfaces: Record<Surface, string> = {
-  paper: 'bg-paper text-ink',
-  mint: 'bg-mint text-ink',
-  pine: 'bg-pine text-paper',
+  bone: 'bg-bone text-ink',
+  sand: 'bg-sand text-ink',
+  night: 'bg-night text-bone',
 };
 
 /**
- * Section edges alternate paper -> mint -> paper -> pine.
- * Pine sections get the cursor spotlight; light sections never do.
+ * Section edges alternate bone -> sand -> bone -> night.
+ * Night sections get the cursor spotlight; light sections never do.
  */
 export function Section({
   children,
-  surface = 'paper',
+  surface = 'bone',
   id,
   className,
   containerClassName,
@@ -34,13 +34,13 @@ export function Section({
       id={id}
       className={cn('section relative isolate overflow-hidden', surfaces[surface], className)}
     >
-      {surface === 'pine' && glow && <CursorGlow />}
+      {surface === 'night' && glow && <CursorGlow />}
       <div className={cn('container-page relative z-10', containerClassName)}>{children}</div>
     </section>
   );
 }
 
-/** Small label above a section heading. Willow on pine, forest on light. */
+/** Small label above a section heading. Willow on night, ink on light. */
 export function Eyebrow({
   children,
   tone = 'dark',
@@ -54,14 +54,11 @@ export function Eyebrow({
     <p
       className={cn(
         'mb-4 flex items-center gap-2.5 text-xs font-semibold tracking-[0.14em] uppercase',
-        tone === 'light' ? 'text-willow' : 'text-forest',
+        tone === 'light' ? 'text-bone/65' : 'text-ink',
         className,
       )}
     >
-      <span
-        aria-hidden
-        className={cn('h-px w-6', tone === 'light' ? 'bg-willow/60' : 'bg-forest/40')}
-      />
+      <span aria-hidden className={cn('h-px w-6', tone === 'light' ? 'bg-bone/35' : 'bg-ink/40')} />
       {children}
     </p>
   );
@@ -83,7 +80,7 @@ export function SectionTitle({
     <Tag
       className={cn(
         'text-[length:var(--text-2xl)]',
-        tone === 'light' ? 'text-paper' : 'text-forest',
+        tone === 'light' ? 'text-bone' : 'text-ink',
         className,
       )}
     >
@@ -106,7 +103,7 @@ export function Lede({
     <p
       className={cn(
         'prose-body mt-5 text-[length:var(--text-base)]',
-        tone === 'light' ? 'text-paper/75' : 'text-slate',
+        tone === 'light' ? 'text-bone/75' : 'text-slate',
         className,
       )}
     >

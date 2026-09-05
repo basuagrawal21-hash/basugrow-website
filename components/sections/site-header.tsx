@@ -70,7 +70,7 @@ export function SiteHeader() {
       className={cn(
         'fixed inset-x-0 top-0 z-50 transition-all duration-300',
         scrolled
-          ? 'border-b border-willow/12 bg-pine/85 py-2.5 backdrop-blur-xl'
+          ? 'border-bone/12 bg-night/85 border-b py-2.5 backdrop-blur-xl'
           : 'border-b border-transparent py-4',
       )}
     >
@@ -82,7 +82,7 @@ export function SiteHeader() {
             <Link
               key={item.href}
               href={item.href}
-              className="rounded-full px-3.5 py-2 text-[0.9375rem] font-medium text-paper/75 transition-colors hover:bg-willow/10 hover:text-paper"
+              className="text-bone/75 hover:bg-bone/10 hover:text-bone rounded-full px-3.5 py-2 text-[0.9375rem] font-medium transition-colors"
             >
               {item.label}
             </Link>
@@ -102,7 +102,7 @@ export function SiteHeader() {
           aria-expanded={open}
           aria-controls="mobile-nav"
           aria-label={open ? 'Close menu' : 'Open menu'}
-          className="inline-flex h-11 w-11 items-center justify-center rounded-full border-[1.5px] border-willow/30 text-paper lg:hidden"
+          className="border-bone/25 text-bone inline-flex h-11 w-11 items-center justify-center rounded-full border-[1.5px] lg:hidden"
         >
           {open ? <X size={20} aria-hidden /> : <Menu size={20} aria-hidden />}
         </button>
@@ -113,7 +113,7 @@ export function SiteHeader() {
         id="mobile-nav"
         ref={panelRef}
         hidden={!open}
-        className="fixed inset-0 top-0 z-50 flex h-dvh flex-col bg-pine px-5 pt-5 pb-10 lg:hidden"
+        className="bg-night fixed inset-0 top-0 z-50 flex h-dvh flex-col px-5 pt-5 pb-10 lg:hidden"
       >
         <div className="flex items-center justify-between">
           <Logo tone="light" />
@@ -124,7 +124,7 @@ export function SiteHeader() {
               triggerRef.current?.focus();
             }}
             aria-label="Close menu"
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full border-[1.5px] border-willow/30 text-paper"
+            className="border-bone/25 text-bone inline-flex h-11 w-11 items-center justify-center rounded-full border-[1.5px]"
           >
             <X size={20} aria-hidden />
           </button>
@@ -135,7 +135,7 @@ export function SiteHeader() {
             <Link
               key={item.href}
               href={item.href}
-              className="border-b border-willow/12 py-4 font-display text-[length:var(--text-lg)] font-extrabold tracking-[-0.03em] text-paper"
+              className="border-bone/12 font-display text-bone border-b py-4 text-[length:var(--text-lg)] font-extrabold tracking-[-0.03em]"
             >
               {item.label}
             </Link>

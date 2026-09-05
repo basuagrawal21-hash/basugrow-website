@@ -67,9 +67,9 @@ export function LeadTicker() {
 
   return (
     <div className="relative mx-auto w-full max-w-[320px]">
-      <div className="relative overflow-hidden rounded-[2.25rem] border-[1.5px] border-willow/25 bg-pine p-2.5">
+      <div className="border-bone/12 bg-night relative overflow-hidden rounded-[2.25rem] border-[1.5px] p-2.5">
         <div className="overflow-hidden rounded-[1.75rem] bg-[#0F2A23]">
-          <div className="flex items-center justify-between px-5 pt-3 pb-2 text-[0.6875rem] text-paper/45">
+          <div className="text-bone/45 flex items-center justify-between px-5 pt-3 pb-2 text-[0.6875rem]">
             <span className="tnum">9:41</span>
             <div className="flex items-center gap-1.5">
               <Signal size={11} aria-hidden />
@@ -78,16 +78,16 @@ export function LeadTicker() {
             </div>
           </div>
 
-          <div className="flex items-center gap-3 border-b border-willow/10 px-5 pb-3.5">
+          <div className="border-bone/10 flex items-center gap-3 border-b px-5 pb-3.5">
             <span
               aria-hidden
-              className="grid h-9 w-9 place-items-center rounded-full bg-willow/15 text-[0.8125rem] font-semibold text-willow"
+              className="bg-willow/15 text-willow grid h-9 w-9 place-items-center rounded-full text-[0.8125rem] font-semibold"
             >
               BG
             </span>
             <div className="leading-tight">
-              <p className="text-[0.875rem] font-semibold text-paper">New leads</p>
-              <p className="text-[0.75rem] text-willow">delivered instantly</p>
+              <p className="text-bone text-[0.875rem] font-semibold">New leads</p>
+              <p className="text-willow text-[0.75rem]">delivered instantly</p>
             </div>
           </div>
 
@@ -109,7 +109,7 @@ export function LeadTicker() {
                 <motion.div
                   key={lead.name}
                   aria-hidden
-                  className="absolute inset-x-0 top-0 rounded-2xl border-[1.5px] border-willow/15 bg-willow/[0.07] px-3.5 py-2.5"
+                  className="border-bone/10 bg-bone/[0.04] absolute inset-x-0 top-0 rounded-2xl border-[1.5px] px-3.5 py-2.5"
                   style={{ height: CARD_H }}
                   initial={false}
                   animate={target}
@@ -120,13 +120,13 @@ export function LeadTicker() {
                   }
                 >
                   <div className="flex items-baseline justify-between gap-2">
-                    <p className="text-[0.9375rem] font-semibold text-paper">{lead.name}</p>
-                    <span className="tnum shrink-0 text-[0.6875rem] text-paper/40">now</span>
+                    <p className="text-bone text-[0.9375rem] font-semibold">{lead.name}</p>
+                    <span className="tnum text-bone/40 shrink-0 text-[0.6875rem]">now</span>
                   </div>
-                  <p className="mt-0.5 text-[0.8125rem] text-willow">{lead.enquiry}</p>
+                  <p className="text-willow mt-0.5 text-[0.8125rem]">{lead.enquiry}</p>
                   <div className="mt-1 flex items-center gap-1.5">
-                    <CheckCheck size={12} className="shrink-0 text-willow/70" aria-hidden />
-                    <p className="truncate text-[0.75rem] text-paper/45">{lead.place}</p>
+                    <CheckCheck size={12} className="text-willow/70 shrink-0" aria-hidden />
+                    <p className="text-bone/45 truncate text-[0.75rem]">{lead.place}</p>
                   </div>
                 </motion.div>
               );
@@ -135,7 +135,7 @@ export function LeadTicker() {
         </div>
       </div>
 
-      <p className="mt-3 text-center text-[0.8125rem] text-paper/40">
+      <p className="text-bone/40 mt-3 text-center text-[0.8125rem]">
         Sample — illustrative names and enquiries
       </p>
     </div>

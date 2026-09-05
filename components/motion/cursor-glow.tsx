@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 
 /**
- * Soft willow glow that follows the pointer across a pine section.
+ * Soft warm glow that follows the pointer across a night section.
  * Desktop pointer devices only, rAF-throttled, and it writes to CSS custom
  * properties rather than React state so it never triggers a render.
  */
@@ -62,7 +62,7 @@ export function CursorGlow({ size = 420, opacity = 0.1 }: { size?: number; opaci
       className="pointer-events-none absolute inset-0 z-0 opacity-0 transition-opacity duration-500"
       style={{
         mixBlendMode: 'soft-light',
-        background: `radial-gradient(${size}px circle at var(--gx, 50%) var(--gy, 50%), color-mix(in srgb, var(--color-willow) ${opacity * 100}%, transparent), transparent 70%)`,
+        background: `radial-gradient(${size}px circle at var(--gx, 50%) var(--gy, 50%), color-mix(in srgb, var(--color-bone) ${opacity * 100}%, transparent), transparent 70%)`,
       }}
     />
   );

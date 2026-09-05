@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 
 /**
  * Service and industry cards. The pointer position is written to CSS custom
- * properties, which drive a willow glow that tracks the cursor along the card
+ * properties, which drive a warm glow that tracks the cursor along the card
  * edge, plus a 3 degree tilt. No React state, no re-renders.
  */
 export function SpotlightCard({
@@ -65,7 +65,7 @@ export function SpotlightCard({
         className="pointer-events-none absolute inset-0 -z-10 opacity-[var(--lift,0)] transition-opacity duration-300"
         style={{
           background:
-            'radial-gradient(280px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--color-willow) 16%, transparent), transparent 65%)',
+            'radial-gradient(280px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--color-ink) 10%, transparent), transparent 65%)',
         }}
       />
       {/* Border that brightens toward the cursor. */}
@@ -75,7 +75,7 @@ export function SpotlightCard({
         style={{
           padding: '1.5px',
           background:
-            'radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%), var(--color-willow), transparent 70%)',
+            'radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%), var(--color-ink), transparent 70%)',
           WebkitMask: 'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)',
           WebkitMaskComposite: 'xor',
           maskComposite: 'exclude',

@@ -3,7 +3,7 @@ import { type ComponentProps, type ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import { Magnetic } from '@/components/motion/magnetic';
 
-type Variant = 'gold' | 'outline-dark' | 'outline-light' | 'forest' | 'ghost';
+type Variant = 'gold' | 'outline-dark' | 'outline-light' | 'ink' | 'ghost';
 type Size = 'md' | 'lg';
 
 const base =
@@ -12,12 +12,12 @@ const base =
 const variants: Record<Variant, string> = {
   /* Primary. Ink on gold measures 11.4:1. */
   gold: 'bg-gold text-ink hover:bg-[#FFD37A]',
-  /* On pine sections. */
-  'outline-dark': 'border-[1.5px] border-willow/45 text-paper hover:border-willow hover:bg-willow/10',
-  /* On paper and mint sections. */
-  'outline-light': 'border-[1.5px] border-forest/25 text-forest hover:border-forest hover:bg-forest/5',
-  forest: 'bg-forest text-paper hover:bg-pine',
-  ghost: 'text-forest hover:bg-forest/5',
+  /* On night sections. */
+  'outline-dark': 'border-[1.5px] border-bone/30 text-bone hover:border-bone/60 hover:bg-bone/10',
+  /* On bone and sand sections. */
+  'outline-light': 'border-[1.5px] border-ink/25 text-ink hover:border-ink hover:bg-ink/5',
+  ink: 'bg-ink text-bone hover:bg-night',
+  ghost: 'text-ink hover:bg-ink/5',
 };
 
 const sizes: Record<Size, string> = {

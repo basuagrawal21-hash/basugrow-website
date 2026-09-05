@@ -2,34 +2,38 @@
 
 /* ---------------------------------------------------------------------------
    BasuGrow design tokens.
-   Taken from the brand's own creatives: cream paper, deep forest type, willow
-   green structure, one warm gold accent used like a highlighter.
-   Cream is the dominant surface. Pine is punctuation only — hero, results,
+   Warm neutral surfaces, one gold accent, and the brand green kept for the
+   logo and small marks only — green is the mark, not the wallpaper.
+   Bone is the dominant surface; night is punctuation — hero, results and the
    final CTA. Nothing else.
 --------------------------------------------------------------------------- */
 
 @theme {
-  /* Palette */
-  --color-pine: #0b211c;
-  --color-forest: #1e4d3b;
-  --color-willow: #8acb88;
-  --color-mint: #e4fde1;
-  --color-paper: #f4f5ee;
-  --color-gold: #ffbf46;
-  --color-ink: #1a1f1c;
-  --color-slate: #575761;
+  /* Palette.
+
+     Green is the brand, not the wallbone. It appears in the logo, small
+     icons and thin rules — nowhere else. Surfaces are warm neutrals so the
+     one green thing on screen is the mark itself. */
+  --color-night: #171613; /* dark section backgrounds */
+  --color-bone: #f6f5f1; /* default page background */
+  --color-sand: #eceae4; /* tinted surface, card fill */
+  --color-ink: #1b1a17; /* headings and body on light */
+  --color-slate: #6b6761; /* muted and secondary text */
+  --color-gold: #ffbf46; /* the accent: CTAs + one highlighter per screen */
+  --color-willow: #8acb88; /* brand green: logo, icons, rules. Never text on light. */
 
   /*
-    Contrast, measured, not estimated:
-      ink/paper      14.6:1   body on light            AA + AAA
-      slate/paper     6.2:1   captions on light        AA
-      forest/paper    8.6:1   headlines on light       AA + AAA
-      ink/mint       15.5:1   body on tint             AA + AAA
-      paper/pine     15.0:1   body on dark             AA + AAA
-      willow/pine     9.3:1   headlines on dark        AA + AAA
-      ink/gold       11.4:1   text on gold buttons     AA + AAA
-      willow/paper    1.9:1   FAILS — never carries text on light.
-                              Rules, icon strokes and chart fills only.
+    Contrast, measured with scripts/contrast.mjs, not estimated:
+      ink/bone       15.95:1   body and headings on the page   AA + AAA
+      slate/bone      5.15:1   captions on the page            AA
+      ink/sand       14.47:1   body on the tinted surface      AA + AAA
+      slate/sand      4.67:1   captions on the tint            AA
+      bone/night     16.59:1   body on dark sections           AA + AAA
+      willow/night    9.46:1   green accents on dark           AA + AAA
+      gold/night     11.02:1   gold on dark                    AA + AAA
+      ink/gold       10.60:1   text on gold buttons            AA + AAA
+      willow/bone     1.75:1   FAILS - green never carries text on light
+      gold/bone       1.50:1   FAILS - gold is a fill, never text on light
   */
 
   --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
@@ -69,7 +73,7 @@
   }
 
   body {
-    background-color: var(--color-paper);
+    background-color: var(--color-bone);
     color: var(--color-ink);
     font-family: var(--font-sans);
     font-size: var(--text-base);
@@ -135,13 +139,13 @@
   /* Card: depth from border and tint, never from a grey blur. */
   .card {
     border-radius: var(--radius-card);
-    border: 1.5px solid color-mix(in srgb, var(--color-forest) 12%, transparent);
-    background-color: var(--color-paper);
+    border: 1.5px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+    background-color: var(--color-bone);
   }
 
   .card-on-dark {
-    border-color: color-mix(in srgb, var(--color-willow) 18%, transparent);
-    background-color: color-mix(in srgb, var(--color-willow) 5%, transparent);
+    border-color: color-mix(in srgb, var(--color-bone) 14%, transparent);
+    background-color: color-mix(in srgb, var(--color-bone) 4%, transparent);
   }
 
   .prose-body {
@@ -251,7 +255,7 @@
      one always faintly present, one brighter and revealed only around the
      pointer through a mask. */
   .hero-dots {
-    background-image: radial-gradient(circle, var(--color-willow) 1.5px, transparent 1.5px);
+    background-image: radial-gradient(circle, var(--color-bone) 1.5px, transparent 1.5px);
     background-size: 26px 26px;
     background-position: center;
   }
@@ -366,7 +370,7 @@
    Hero gold marker.
 
    Deliberately CSS rather than JS. The marker is the only thing making the
-   word on top of it readable — it is ink-coloured text on a pine background —
+   word on top of it readable — it is ink-coloured text on a night background —
    so its resting state must be "visible" and it must not depend on hydration.
    A JS animation starting at scaleX(0) renders an invisible word in the SSR
    HTML, which is wrong for crawlers and broken if the script never runs.
