@@ -1,0 +1,234 @@
+@import 'tailwindcss';
+
+/* ---------------------------------------------------------------------------
+   BasuGrow design tokens.
+   Taken from the brand's own creatives: cream paper, deep forest type, willow
+   green structure, one warm gold accent used like a highlighter.
+   Cream is the dominant surface. Pine is punctuation only — hero, results,
+   final CTA. Nothing else.
+--------------------------------------------------------------------------- */
+
+@theme {
+  /* Palette */
+  --color-pine: #0b211c;
+  --color-forest: #1e4d3b;
+  --color-willow: #8acb88;
+  --color-mint: #e4fde1;
+  --color-paper: #f4f5ee;
+  --color-gold: #ffbf46;
+  --color-ink: #1a1f1c;
+  --color-slate: #575761;
+
+  /*
+    Contrast, measured, not estimated:
+      ink/paper      14.6:1   body on light            AA + AAA
+      slate/paper     6.2:1   captions on light        AA
+      forest/paper    8.6:1   headlines on light       AA + AAA
+      ink/mint       15.5:1   body on tint             AA + AAA
+      paper/pine     15.0:1   body on dark             AA + AAA
+      willow/pine     9.3:1   headlines on dark        AA + AAA
+      ink/gold       11.4:1   text on gold buttons     AA + AAA
+      willow/paper    1.9:1   FAILS — never carries text on light.
+                              Rules, icon strokes and chart fills only.
+  */
+
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-geist), 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  /* Type scale. Top three are clamped below for fluid sizing. */
+  --text-xs: 0.875rem;
+  --text-sm: 1rem;
+  --text-base: 1.125rem;
+  --text-md: 1.375rem;
+  --text-lg: 1.75rem;
+  --text-xl: 2.25rem;
+  --text-2xl: clamp(2.25rem, 1.6rem + 2.8vw, 3rem);
+  --text-3xl: clamp(2.75rem, 1.7rem + 4.4vw, 4.25rem);
+  --text-4xl: clamp(3rem, 1.6rem + 5.8vw, 4.75rem);
+
+  --radius-card: 18px;
+
+  /* Vertical rhythm between sections. */
+  --spacing-section: clamp(5rem, 10vw, 9rem);
+  --spacing-content: 1200px;
+
+  --ease-brand: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* --------------------------------------------------------------------------- */
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  /* Lenis drives scrolling; native smooth scroll would fight it. */
+  html.lenis {
+    scroll-behavior: auto;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.02;
+    text-wrap: balance;
+  }
+
+  /* Long-form paragraphs stay under ~68 characters. */
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Gold focus ring, 2px offset, visible on every surface. */
+  :focus-visible {
+    outline: 3px solid var(--color-gold);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background-color: var(--color-gold);
+    color: var(--color-ink);
+  }
+
+  /* Numerals never shift layout while counting up. */
+  .tnum {
+    font-family: var(--font-display);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
+}
+
+@layer components {
+  .container-page {
+    width: 100%;
+    max-width: var(--spacing-content);
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .container-page {
+      padding-inline: 2rem;
+    }
+  }
+
+  .section {
+    padding-block: var(--spacing-section);
+  }
+
+  /* Card: depth from border and tint, never from a grey blur. */
+  .card {
+    border-radius: var(--radius-card);
+    border: 1.5px solid color-mix(in srgb, var(--color-forest) 12%, transparent);
+    background-color: var(--color-paper);
+  }
+
+  .card-on-dark {
+    border-color: color-mix(in srgb, var(--color-willow) 18%, transparent);
+    background-color: color-mix(in srgb, var(--color-willow) 5%, transparent);
+  }
+
+  .prose-body {
+    max-width: 62ch;
+  }
+}
+
+/* Respect the system preference everywhere, including CSS-only animation. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Motion primitive support.
+   Transform and opacity only. Nothing here can trigger layout.
+--------------------------------------------------------------------------- */
+
+@layer components {
+  .spotlight-card {
+    transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transform-style: preserve-3d;
+    transition:
+      transform 0.35s var(--ease-brand),
+      border-color 0.3s var(--ease-brand);
+    will-change: transform;
+  }
+
+  .marquee-track {
+    animation: marquee-scroll var(--marquee-duration, 38s) linear infinite;
+  }
+
+  .marquee-reverse {
+    animation-direction: reverse;
+  }
+
+  .marquee:hover .marquee-track,
+  .marquee:focus-within .marquee-track {
+    animation-play-state: paused;
+  }
+
+  /* Edge fade so logos enter and leave rather than being clipped. */
+  .marquee-fade {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 6rem,
+      #000 calc(100% - 6rem),
+      transparent
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 6rem,
+      #000 calc(100% - 6rem),
+      transparent
+    );
+  }
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+    transform: none;
+  }
+
+  .spotlight-card {
+    transform: none;
+    transition: none;
+  }
+}
