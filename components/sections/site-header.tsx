@@ -1,14 +1,29 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { motion, useReducedMotion } from 'motion/react';
 import { Menu, X, MessageCircle } from 'lucide-react';
 import { nav, site, whatsappLink } from '@/content/site';
 import { Logo } from '@/components/ui/logo';
 import { Button, ButtonLink } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useScrolledPast } from '@/lib/use-scroll';
+
+/**
+ * A link is "current" if the path matches exactly or is a subpage of it.
+ * Hash links (like Process -> /#how-it-works, a home page section rather than
+ * a route) are excluded — there is no reliable route-based way to know the
+ * visitor has scrolled to that section, so it only ever gets the hover glass,
+ * never the persistent current-page glass.
+ */
+function isNavItemActive(pathname: string, href: string) {
+  if (href.includes('#')) return false;
+  const base = href.split('?')[0];
+  if (base === '/') return pathname === '/';
+  return pathname === base || pathname.startsWith(`${base}/`);
+}
 
 export function SiteHeader() {
   const scrolled = useScrolledPast(80);
@@ -25,6 +40,33 @@ export function SiteHeader() {
     setLastPath(pathname);
     if (open) setOpen(false);
   }
+
+  // --- Glass pill indicator (desktop nav only) ------------------------------
+  const reducedMotion = useReducedMotion();
+  const [hoveredHref, setHoveredHref] = useState<string | null>(null);
+  const activeHref = useMemo(
+    () => nav.find((item) => isNavItemActive(pathname, item.href))?.href ?? null,
+    [pathname],
+  );
+  // Hovering always wins; otherwise fall back to whichever page we're on.
+  const targetHref = hoveredHref ?? activeHref;
+  const isHovering = hoveredHref !== null;
+
+  const navContainerRef = useRef<HTMLElement>(null);
+  const linkRefs = useRef(new Map<string, HTMLAnchorElement>());
+  const [pill, setPill] = useState<{ left: number; width: number } | null>(null);
+
+  useEffect(() => {
+    const container = navContainerRef.current;
+    const link = targetHref ? linkRefs.current.get(targetHref) : null;
+    if (!container || !link) {
+      setPill(null);
+      return;
+    }
+    const containerRect = container.getBoundingClientRect();
+    const linkRect = link.getBoundingClientRect();
+    setPill({ left: linkRect.left - containerRect.left, width: linkRect.width });
+  }, [targetHref]);
 
   // Lock the page, trap focus, and restore focus to the trigger on close.
   useEffect(() => {
@@ -77,12 +119,42 @@ export function SiteHeader() {
       <div className="container-page flex items-center justify-between gap-6">
         <Logo tone="light" />
 
-        <nav aria-label="Main" className="hidden items-center gap-1 lg:flex">
+        <nav
+          ref={navContainerRef}
+          aria-label="Main"
+          onPointerLeave={() => setHoveredHref(null)}
+          className="relative hidden items-center gap-1 lg:flex"
+        >
+          {pill && (
+            <motion.span
+              aria-hidden
+              className={cn(
+                'absolute inset-y-1 rounded-full border backdrop-blur-md',
+                isHovering ? 'bg-bone/12 border-bone/18' : 'bg-bone/8 border-bone/12',
+              )}
+              initial={false}
+              animate={{ left: pill.left, width: pill.width, opacity: 1 }}
+              transition={
+                reducedMotion
+                  ? { duration: 0 }
+                  : { type: 'spring', stiffness: 380, damping: 32 }
+              }
+            />
+          )}
+
           {nav.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="text-bone/75 hover:bg-bone/10 hover:text-bone rounded-full px-3.5 py-2 text-[0.9375rem] font-medium transition-colors"
+              ref={(node) => {
+                if (node) linkRefs.current.set(item.href, node);
+                else linkRefs.current.delete(item.href);
+              }}
+              onPointerEnter={() => setHoveredHref(item.href)}
+              className={cn(
+                'relative z-10 rounded-full px-3.5 py-2 text-[0.9375rem] font-medium transition-colors',
+                item.href === targetHref ? 'text-bone' : 'text-bone/75',
+              )}
             >
               {item.label}
             </Link>
