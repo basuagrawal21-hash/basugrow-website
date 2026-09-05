@@ -2,13 +2,36 @@ import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
 /**
- * Inline SVG rather than next/image so the mark inherits currentColor and
- * costs no network request.
+ * The mark is the real BasuGrow logo, lifted from a brand creative by
+ * scripts/extract-logo.mjs and stored as an alpha mask. It is painted with
+ * `background-color: currentColor` through a CSS mask, so one file serves both
+ * the willow-on-pine and forest-on-paper variants and always matches the token.
  *
- * TODO(brand): replace these paths with the supplied logo files. This is a
- * placeholder built to the described mark — BG monogram in a circle with an
- * arrow breaking out of the top right.
+ * TODO(brand): swap in the original vector when it is supplied — drop an SVG at
+ * public/logo-mark.svg and point `maskImage` at it. The mask approach keeps
+ * working unchanged with an SVG source.
  */
+const MASK = 'url(/logo-mark-mask.png)';
+
+export function LogoMark({ className }: { className?: string }) {
+  return (
+    <span
+      aria-hidden
+      className={cn('inline-block shrink-0 bg-current', className)}
+      style={{
+        maskImage: MASK,
+        WebkitMaskImage: MASK,
+        maskSize: 'contain',
+        WebkitMaskSize: 'contain',
+        maskRepeat: 'no-repeat',
+        WebkitMaskRepeat: 'no-repeat',
+        maskPosition: 'center',
+        WebkitMaskPosition: 'center',
+      }}
+    />
+  );
+}
+
 export function Logo({
   className,
   tone = 'light',
@@ -19,51 +42,19 @@ export function Logo({
   tone?: 'light' | 'dark';
   showWordmark?: boolean;
 }) {
-  const color = tone === 'light' ? 'text-willow' : 'text-forest';
-  const word = tone === 'light' ? 'text-paper' : 'text-forest';
-
   return (
     <Link
       href="/"
       className={cn('inline-flex items-center gap-2.5 rounded-lg', className)}
       aria-label="BasuGrow — home"
     >
-      <svg
-        viewBox="0 0 80 80"
-        className={cn('h-9 w-9 shrink-0', color)}
-        fill="none"
-        aria-hidden
-      >
-        <path
-          d="M64 44a28 28 0 1 1-9.6-21.1"
-          stroke="currentColor"
-          strokeWidth="5.5"
-          strokeLinecap="round"
-        />
-        <path
-          d="M52 28h20v20"
-          stroke="currentColor"
-          strokeWidth="5.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path d="M43 57 72 28" stroke="currentColor" strokeWidth="5.5" strokeLinecap="round" />
-        <text
-          x="36"
-          y="53"
-          fontSize="27"
-          fontWeight="800"
-          letterSpacing="-1.6"
-          fill="currentColor"
-          textAnchor="middle"
-          fontFamily="var(--font-display)"
-        >
-          BG
-        </text>
-      </svg>
+      <LogoMark className={cn('h-9 w-9', tone === 'light' ? 'text-willow' : 'text-forest')} />
       {showWordmark && (
         <span
-          className={cn('font-display text-[1.375rem] font-extrabold tracking-[-0.04em]', word)}
+          className={cn(
+            'font-display text-[1.375rem] font-extrabold tracking-[-0.04em]',
+            tone === 'light' ? 'text-paper' : 'text-forest',
+          )}
         >
           BasuGrow
         </span>

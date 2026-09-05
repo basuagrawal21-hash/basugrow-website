@@ -6,7 +6,7 @@ import type { CaseStudy } from './types';
  *
  * For each one the owner needs to supply:
  *   - client name + written permission to name them (or keep them anonymised
- *     as "a gym in Gomti Nagar" — that is fine and still credible)
+ *     as "a gym in a tier-two city" — that is fine and still credible)
  *   - actual spend, actual lead count, actual cost per lead, actual date range
  *   - one sentence from the client about what changed for their business
  *
@@ -19,7 +19,7 @@ export const caseStudies: CaseStudy[] = [
     slug: 'gym-trial-campaign',
     client: 'Fitness studio',
     industry: 'Gyms & fitness',
-    city: 'Lucknow',
+    city: 'Indore',
     headline: 'Trial passes booked from a two-kilometre radius',
     timeframe: '90 days',
     isSample: true,
@@ -46,7 +46,7 @@ export const caseStudies: CaseStudy[] = [
     slug: 'dental-clinic-consults',
     client: 'Dental clinic',
     industry: 'Clinics & dental',
-    city: 'Lucknow',
+    city: 'Jaipur',
     headline: 'Aligner consultations booked without discounting treatment',
     timeframe: '120 days',
     isSample: true,

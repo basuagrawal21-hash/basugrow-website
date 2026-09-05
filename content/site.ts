@@ -10,7 +10,7 @@ export const site = {
   locale: 'en_IN',
   founded: '2024',
   base: {
-    city: 'Lucknow',
+    city: 'Jhansi',
     state: 'Uttar Pradesh',
     country: 'IN',
   },
@@ -29,8 +29,7 @@ export const site = {
   whatsappMessage: 'Hi BasuGrow, I want more leads for my business',
   /** Cities we actively run campaigns in. Used in the footer and LocalBusiness JSON-LD. */
   cities: [
-    'Lucknow',
-    'Kanpur',
+    'Jhansi',
     'Delhi NCR',
     'Mumbai',
     'Bengaluru',
@@ -38,6 +37,9 @@ export const site = {
     'Pune',
     'Jaipur',
     'Indore',
+    'Lucknow',
+    'Kanpur',
+    'Bhopal',
     'Chandigarh',
   ],
 } as const;

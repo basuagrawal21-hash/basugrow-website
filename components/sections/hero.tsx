@@ -61,12 +61,12 @@ export function Hero() {
               <span aria-hidden className="text-willow/40">
                 ·
               </span>
-              {site.base.city}
+              Clients across India
               {/* Third item is dropped on narrow screens so the eyebrow holds one line. */}
               <span aria-hidden className="hidden text-willow/40 sm:inline">
                 ·
               </span>
-              <span className="hidden sm:inline">Clients across India</span>
+              <span className="hidden sm:inline">Based in {site.base.city}</span>
             </motion.p>
 
             <h1 className="text-[length:var(--text-4xl)] leading-[0.95] text-paper">

@@ -23,13 +23,15 @@ type Lead = {
   place: string;
 };
 
+// Cities rather than localities — campaigns run right across India, and the
+// ticker should read that way at a glance.
 const LEADS: Lead[] = [
-  { name: 'Rahul', enquiry: 'Gym trial enquiry', place: 'Gomti Nagar' },
-  { name: 'Priya', enquiry: 'Free trial booked', place: 'Hazratganj' },
-  { name: 'Imran', enquiry: 'Site visit requested', place: 'Sushant Golf City' },
-  { name: 'Sneha', enquiry: 'Consultation enquiry', place: 'Aliganj' },
-  { name: 'Vikas', enquiry: 'Membership enquiry', place: 'Indira Nagar' },
-  { name: 'Fatima', enquiry: 'Salon first visit', place: 'Mahanagar' },
+  { name: 'Rahul', enquiry: 'Gym trial enquiry', place: 'Indore' },
+  { name: 'Priya', enquiry: 'Free trial booked', place: 'Pune' },
+  { name: 'Imran', enquiry: 'Site visit requested', place: 'Jaipur' },
+  { name: 'Sneha', enquiry: 'Consultation enquiry', place: 'Hyderabad' },
+  { name: 'Vikas', enquiry: 'Membership enquiry', place: 'Jhansi' },
+  { name: 'Fatima', enquiry: 'Salon first visit', place: 'Delhi NCR' },
 ];
 
 const INTERVAL = 2200;

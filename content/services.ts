@@ -289,7 +289,7 @@ export const services: Service[] = [
     faqs: [
       {
         q: 'Do you shoot the video yourselves?',
-        a: 'Usually not — we send a shot list and your team films on a phone, which keeps costs down and looks more native than produced footage. For clients in and around Lucknow we can arrange a shoot day where the business genuinely needs it.',
+        a: 'Usually not — we send a shot list and your team films on a phone, which keeps costs down and looks more native than produced footage. Where a business genuinely needs a shoot day, we arrange one with a local videographer in your city.',
       },
       {
         q: 'How many creatives do I get?',

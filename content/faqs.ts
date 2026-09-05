@@ -32,7 +32,7 @@ export const homeFaqs: Faq[] = [
   },
   {
     q: 'Which cities do you work in?',
-    a: 'We are based in Lucknow and run campaigns for clients across India. Nothing about the work requires us to be in the same city as you, though for creative shoots in and around Lucknow we can be there in person.',
+    a: 'All of them. We run campaigns for clients right across India — metros, tier-two cities and towns — and the work does not require us to be in your city. We are based in Jhansi, Uttar Pradesh, and everything from strategy to reporting happens over calls and WhatsApp.',
   },
   {
     q: 'How do I know what is happening with my money?',
