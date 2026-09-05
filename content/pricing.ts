@@ -35,7 +35,7 @@ export const pricingTiers: PricingTier[] = [
     priceMonthly: 30000,
     adSpendRange: '₹50,000 – ₹2,00,000 a month',
     featured: true,
-    ctaLabel: 'Most businesses start here',
+    ctaLabel: 'Start with Growth',
     includes: [
       'Everything in Starter',
       'Up to three campaigns — cold, retargeting and one test',

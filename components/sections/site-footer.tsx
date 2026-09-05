@@ -112,7 +112,7 @@ export function SiteFooter() {
           <p className="text-bone/55 mt-3 text-[0.9375rem]">{site.cities.join(' · ')}</p>
         </div>
 
-        <div className="border-bone/12 text-bone/50 mt-10 flex flex-col gap-4 border-t pt-8 text-[0.875rem] sm:flex-row sm:items-center sm:justify-between">
+        <div className="border-bone/12 text-bone/50 mt-10 flex flex-col gap-4 border-t pt-8 pb-20 text-[0.875rem] sm:flex-row sm:items-center sm:justify-between md:pb-0">
           <p>
             © {new Date().getFullYear()} {site.name}. All rights reserved.
           </p>

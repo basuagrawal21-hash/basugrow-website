@@ -27,41 +27,90 @@ export function PricingTable({ surface = 'sand' }: { surface?: 'bone' | 'sand' }
             as="li"
             key={tier.slug}
             delay={i * 0.06}
-            className={cn('h-full', tier.featured && 'lg:-mt-4 lg:mb-4')}
+            className={cn('h-full', tier.featured && 'lg:-mt-5 lg:mb-5')}
           >
+            {/* The recommended tier is the one dark card in a row of cream
+                ones. Inverting the surface does the highlighting on its own,
+                so the badge can stay small and the eye still lands here
+                first. */}
             <div
               className={cn(
-                'card flex h-full flex-col p-7',
-                tier.featured ? 'border-ink/30 bg-bone border-2' : 'bg-bone',
+                'relative flex h-full flex-col rounded-[var(--radius-card)] p-7',
+                tier.featured ? 'bg-night text-bone border-gold/35 border-2' : 'card bg-bone',
               )}
             >
               {tier.featured && (
-                <p className="bg-gold text-ink mb-5 -mt-1 w-fit rounded-full px-3 py-1 text-[0.75rem] font-semibold">
+                <p className="bg-gold text-ink absolute -top-3 left-7 rounded-full px-3 py-1 text-[0.75rem] font-semibold">
                   Most businesses start here
                 </p>
               )}
 
-              <h3 className="text-ink text-[1.25rem]">{tier.name}</h3>
-              <p className="text-slate mt-2 min-h-[3.25rem] text-[0.9375rem]">{tier.tagline}</p>
+              <h3 className={cn('text-[1.25rem]', tier.featured ? 'text-bone mt-2' : 'text-ink')}>
+                {tier.name}
+              </h3>
+              <p
+                className={cn(
+                  'mt-2 min-h-[3.25rem] text-[0.9375rem]',
+                  tier.featured ? 'text-bone/70' : 'text-slate',
+                )}
+              >
+                {tier.tagline}
+              </p>
 
-              <p className="text-ink mt-5 text-[length:var(--text-lg)] leading-none font-extrabold">
+              <p
+                className={cn(
+                  'mt-5 text-[length:var(--text-lg)] leading-none font-extrabold',
+                  tier.featured ? 'text-bone' : 'text-ink',
+                )}
+              >
                 {tier.priceMonthly === null ? (
                   <span className="text-[length:var(--text-md)]">Let&rsquo;s talk</span>
                 ) : (
                   <>
                     <span className="tnum">{inr(tier.priceMonthly)}</span>
-                    <span className="text-slate text-[0.9375rem] font-medium"> /month</span>
+                    <span
+                      className={cn(
+                        'text-[0.9375rem] font-medium',
+                        tier.featured ? 'text-bone/60' : 'text-slate',
+                      )}
+                    >
+                      {' '}
+                      /month
+                    </span>
                   </>
                 )}
               </p>
-              <p className="text-slate mt-2 text-[0.875rem]">
+              <p
+                className={cn(
+                  'mt-2 text-[0.875rem]',
+                  tier.featured ? 'text-bone/60' : 'text-slate',
+                )}
+              >
                 Built for {tier.adSpendRange} in ad spend
               </p>
 
-              <ul className="border-ink/10 mt-6 flex-1 space-y-2.5 border-t pt-6">
+              <ul
+                className={cn(
+                  'mt-6 flex-1 space-y-2.5 border-t pt-6',
+                  tier.featured ? 'border-bone/15' : 'border-ink/10',
+                )}
+              >
                 {tier.includes.map((item) => (
-                  <li key={item} className="text-slate flex gap-2.5 text-[0.9375rem]">
-                    <Check size={16} className="text-ink/50 mt-1 shrink-0" aria-hidden />
+                  <li
+                    key={item}
+                    className={cn(
+                      'flex gap-2.5 text-[0.9375rem]',
+                      tier.featured ? 'text-bone/80' : 'text-slate',
+                    )}
+                  >
+                    <Check
+                      size={16}
+                      className={cn(
+                        'mt-1 shrink-0',
+                        tier.featured ? 'text-willow' : 'text-moss/60',
+                      )}
+                      aria-hidden
+                    />
                     {item}
                   </li>
                 ))}
@@ -71,7 +120,7 @@ export function PricingTable({ surface = 'sand' }: { surface?: 'bone' | 'sand' }
                 href="/contact"
                 variant={tier.featured ? 'gold' : 'outline-light'}
                 size="md"
-                className="mt-7 w-full"
+                className={cn('mt-7 w-full', tier.featured && 'btn-sheen')}
               >
                 {tier.ctaLabel}
               </Button>
