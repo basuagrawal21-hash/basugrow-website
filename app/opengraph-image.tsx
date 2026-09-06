@@ -1,7 +1,6 @@
-import fs from 'node:fs';
-import path from 'node:path';
 import { ImageResponse } from 'next/og';
 import { site } from '@/content/site';
+import { logoMarkWillowDataUri as markDataUri } from '@/lib/og-logo';
 
 export const alt = `${site.name} — ${site.tagline}`;
 export const size = { width: 1200, height: 630 };
@@ -16,9 +15,6 @@ export const contentType = 'image/png';
  * time — a webfont here costs a network round trip on every regeneration and
  * the card is set large enough that the difference is not worth it.
  */
-const markDataUri = `data:image/png;base64,${fs
-  .readFileSync(path.join(process.cwd(), 'public/logo-mark-willow.png'))
-  .toString('base64')}`;
 
 export default async function OpengraphImage() {
   return new ImageResponse(
