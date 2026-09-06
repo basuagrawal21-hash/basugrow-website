@@ -334,7 +334,8 @@
   }
 
   .btn-sheen:hover::after,
-  .btn-sheen:focus-visible::after {
+  .btn-sheen:focus-visible::after,
+  .btn-sheen:active::after {
     transform: translate3d(520%, 0, 0) skewX(-18deg);
   }
 
@@ -355,7 +356,8 @@
     transition: transform 400ms var(--ease-brand);
   }
 
-  .trust-item:hover::after {
+  .trust-item:hover::after,
+  .trust-item:active::after {
     transform: scaleX(1);
   }
 }
