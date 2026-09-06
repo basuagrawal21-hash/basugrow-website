@@ -5,7 +5,7 @@ import { SiteHeader } from '@/components/sections/site-header';
 import { SiteFooter } from '@/components/sections/site-footer';
 import { SmoothScroll } from '@/components/motion/smooth-scroll';
 import { FloatingActions, ScrollProgress } from '@/components/ui/floating-actions';
-import { OrganizationLd } from '@/components/seo/json-ld';
+import { OrganizationLd, WebSiteLd } from '@/components/seo/json-ld';
 import { Analytics } from '@/components/tracking/analytics';
 import { ConsentBar } from '@/components/tracking/consent-bar';
 import './globals.css';
@@ -43,6 +43,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to content
         </a>
         <OrganizationLd />
+        <WebSiteLd />
         <SmoothScroll />
         <ScrollProgress />
         <SiteHeader />

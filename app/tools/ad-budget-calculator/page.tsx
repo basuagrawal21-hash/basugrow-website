@@ -4,17 +4,32 @@ import { Section } from '@/components/ui/section';
 import { BudgetCalculator } from '@/components/sections/budget-calculator';
 import { FinalCta } from '@/components/sections/final-cta';
 import { pageMetadata } from '@/lib/seo';
+import { SoftwareApplicationLd, BreadcrumbLd } from '@/components/seo/json-ld';
+
+const description =
+  'Start from the customers you want next month and work backwards to the Meta ads budget that gets you there. Free, no email required.';
 
 export const metadata = pageMetadata({
   title: 'Ad budget planner',
-  description:
-    'Start from the customers you want next month and work backwards to the Meta ads budget that gets you there. Free, no email required.',
+  description,
   path: '/tools/ad-budget-calculator',
 });
 
 export default function BudgetCalculatorPage() {
   return (
     <>
+      <SoftwareApplicationLd
+        name="Ad budget planner"
+        description={description}
+        path="/tools/ad-budget-calculator"
+      />
+      <BreadcrumbLd
+        items={[
+          { name: 'Home', path: '/' },
+          { name: 'Free tools', path: '/tools' },
+          { name: 'Ad budget planner', path: '/tools/ad-budget-calculator' },
+        ]}
+      />
       <PageHero
         eyebrow="Free tool"
         title="How much do you need to spend?"

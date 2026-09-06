@@ -4,17 +4,32 @@ import { Section } from '@/components/ui/section';
 import { CplCalculator } from '@/components/sections/cpl-calculator';
 import { FinalCta } from '@/components/sections/final-cta';
 import { pageMetadata } from '@/lib/seo';
+import { SoftwareApplicationLd, BreadcrumbLd } from '@/components/seo/json-ld';
+
+const description =
+  'Work out what a lead and a customer actually cost you from Meta ads, and what your return on ad spend looks like. Free, no email required.';
 
 export const metadata = pageMetadata({
   title: 'Cost-per-lead calculator',
-  description:
-    'Work out what a lead and a customer actually cost you from Meta ads, and what your return on ad spend looks like. Free, no email required.',
+  description,
   path: '/tools/cpl-calculator',
 });
 
 export default function CplCalculatorPage() {
   return (
     <>
+      <SoftwareApplicationLd
+        name="Cost-per-lead calculator"
+        description={description}
+        path="/tools/cpl-calculator"
+      />
+      <BreadcrumbLd
+        items={[
+          { name: 'Home', path: '/' },
+          { name: 'Free tools', path: '/tools' },
+          { name: 'Cost-per-lead calculator', path: '/tools/cpl-calculator' },
+        ]}
+      />
       <PageHero
         eyebrow="Free tool"
         title="What is a customer actually costing you?"

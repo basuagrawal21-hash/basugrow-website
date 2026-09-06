@@ -5,6 +5,7 @@ import { Section } from '@/components/ui/section';
 import { FinalCta } from '@/components/sections/final-cta';
 import { caseStudies } from '@/content/case-studies';
 import { pageMetadata } from '@/lib/seo';
+import { BreadcrumbLd } from '@/components/seo/json-ld';
 
 export const metadata = pageMetadata({
   title: 'Work',
@@ -18,6 +19,7 @@ const anySample = caseStudies.some((c) => c.isSample);
 export default function WorkIndexPage() {
   return (
     <>
+      <BreadcrumbLd items={[{ name: 'Home', path: '/' }, { name: 'Work', path: '/work' }]} />
       <PageHero
         eyebrow="Work"
         title="The problem, the change, and what it cost"

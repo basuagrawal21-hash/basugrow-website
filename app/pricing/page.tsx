@@ -3,8 +3,9 @@ import { PricingTable } from '@/components/sections/pricing-table';
 import { FaqSection } from '@/components/sections/faq-section';
 import { FinalCta } from '@/components/sections/final-cta';
 import { pricingFaqs } from '@/content/faqs';
+import { pricingTiers } from '@/content/pricing';
 import { pageMetadata } from '@/lib/seo';
-import { FaqLd } from '@/components/seo/json-ld';
+import { FaqLd, PricingLd, BreadcrumbLd } from '@/components/seo/json-ld';
 
 export const metadata = pageMetadata({
   title: 'Pricing',
@@ -17,6 +18,8 @@ export default function PricingPage() {
   return (
     <>
       <FaqLd items={pricingFaqs} />
+      <PricingLd tiers={pricingTiers} />
+      <BreadcrumbLd items={[{ name: 'Home', path: '/' }, { name: 'Pricing', path: '/pricing' }]} />
       <PageHero
         eyebrow="Pricing"
         title="Published, so you don't have to sit through a call to find out"

@@ -5,6 +5,7 @@ import { Section } from '@/components/ui/section';
 import { SpotlightCard } from '@/components/motion/spotlight-card';
 import { FinalCta } from '@/components/sections/final-cta';
 import { pageMetadata } from '@/lib/seo';
+import { BreadcrumbLd } from '@/components/seo/json-ld';
 
 export const metadata = pageMetadata({
   title: 'Free tools',
@@ -31,6 +32,7 @@ const tools = [
 export default function ToolsIndexPage() {
   return (
     <>
+      <BreadcrumbLd items={[{ name: 'Home', path: '/' }, { name: 'Free tools', path: '/tools' }]} />
       <PageHero
         eyebrow="Free tools"
         title="Do the maths before you spend anything"

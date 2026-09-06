@@ -5,6 +5,7 @@ import { Section } from '@/components/ui/section';
 import { FinalCta } from '@/components/sections/final-cta';
 import { getAllPosts, formatPostDate } from '@/lib/blog';
 import { pageMetadata } from '@/lib/seo';
+import { BreadcrumbLd } from '@/components/seo/json-ld';
 
 export const metadata = pageMetadata({
   title: 'Blog',
@@ -18,6 +19,7 @@ export default function BlogIndexPage() {
 
   return (
     <>
+      <BreadcrumbLd items={[{ name: 'Home', path: '/' }, { name: 'Blog', path: '/blog' }]} />
       <PageHero
         eyebrow="Blog"
         title="What we have learned running ads for local businesses"

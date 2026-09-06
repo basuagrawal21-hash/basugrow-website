@@ -7,6 +7,7 @@ import { Icon } from '@/components/ui/icon';
 import { FinalCta } from '@/components/sections/final-cta';
 import { industries } from '@/content/industries';
 import { pageMetadata } from '@/lib/seo';
+import { BreadcrumbLd } from '@/components/seo/json-ld';
 
 export const metadata = pageMetadata({
   title: 'Industries',
@@ -18,6 +19,9 @@ export const metadata = pageMetadata({
 export default function IndustriesIndexPage() {
   return (
     <>
+      <BreadcrumbLd
+        items={[{ name: 'Home', path: '/' }, { name: 'Industries', path: '/industries' }]}
+      />
       <PageHero
         eyebrow="Industries"
         title="We know what works in these six"

@@ -7,6 +7,7 @@ import { Icon } from '@/components/ui/icon';
 import { FinalCta } from '@/components/sections/final-cta';
 import { services } from '@/content/services';
 import { pageMetadata } from '@/lib/seo';
+import { BreadcrumbLd } from '@/components/seo/json-ld';
 
 export const metadata = pageMetadata({
   title: 'Services',
@@ -18,6 +19,7 @@ export const metadata = pageMetadata({
 export default function ServicesIndexPage() {
   return (
     <>
+      <BreadcrumbLd items={[{ name: 'Home', path: '/' }, { name: 'Services', path: '/services' }]} />
       <PageHero
         eyebrow="Services"
         title="Everything between your budget and a booked customer"

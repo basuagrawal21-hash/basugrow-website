@@ -6,6 +6,7 @@ import { FinalCta } from '@/components/sections/final-cta';
 import { mdxComponents } from '@/components/ui/mdx';
 import { getPost, getPostSlugs, formatPostDate } from '@/lib/blog';
 import { pageMetadata } from '@/lib/seo';
+import { ArticleLd, BreadcrumbLd } from '@/components/seo/json-ld';
 import { site } from '@/content/site';
 
 export function generateStaticParams() {
@@ -30,24 +31,21 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   const { meta, content } = post;
 
-  const articleLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: meta.title,
-    description: meta.description,
-    datePublished: meta.date,
-    dateModified: meta.date,
-    author: { '@type': 'Organization', name: site.name, url: site.url },
-    publisher: { '@type': 'Organization', name: site.name, url: site.url },
-    mainEntityOfPage: `${site.url}/blog/${slug}`,
-  };
-
   return (
     <>
-      <script
-        type="application/ld+json"
-        // Values come from our own frontmatter, not user input.
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }}
+      <ArticleLd
+        title={meta.title}
+        description={meta.description}
+        path={`/blog/${slug}`}
+        datePublished={meta.date}
+        tag={meta.tag}
+      />
+      <BreadcrumbLd
+        items={[
+          { name: 'Home', path: '/' },
+          { name: 'Blog', path: '/blog' },
+          { name: meta.title, path: `/blog/${slug}` },
+        ]}
       />
 
       <PageHero

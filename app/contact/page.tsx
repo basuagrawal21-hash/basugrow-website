@@ -5,6 +5,7 @@ import { LeadForm } from '@/components/sections/lead-form';
 import { InstagramGlyph } from '@/components/ui/icons';
 import { site, whatsappLink } from '@/content/site';
 import { pageMetadata } from '@/lib/seo';
+import { BreadcrumbLd } from '@/components/seo/json-ld';
 
 export const metadata = pageMetadata({
   title: 'Contact',
@@ -18,6 +19,7 @@ export default function ContactPage() {
 
   return (
     <>
+      <BreadcrumbLd items={[{ name: 'Home', path: '/' }, { name: 'Contact', path: '/contact' }]} />
       <PageHero
         eyebrow="Contact"
         title="Tell us what you sell"

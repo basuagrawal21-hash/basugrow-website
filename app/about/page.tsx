@@ -3,6 +3,7 @@ import { Section, Eyebrow, SectionTitle, Lede } from '@/components/ui/section';
 import { FinalCta } from '@/components/sections/final-cta';
 import { site } from '@/content/site';
 import { pageMetadata } from '@/lib/seo';
+import { BreadcrumbLd } from '@/components/seo/json-ld';
 
 export const metadata = pageMetadata({
   title: 'About',
@@ -52,6 +53,7 @@ const notFor = [
 export default function AboutPage() {
   return (
     <>
+      <BreadcrumbLd items={[{ name: 'Home', path: '/' }, { name: 'About', path: '/about' }]} />
       <PageHero
         eyebrow="About"
         title="A small agency that would rather be useful than impressive"

@@ -4,6 +4,7 @@ import { Section, Eyebrow, SectionTitle } from '@/components/ui/section';
 import { FinalCta } from '@/components/sections/final-cta';
 import { caseStudies, getCaseStudy } from '@/content/case-studies';
 import { pageMetadata } from '@/lib/seo';
+import { BreadcrumbLd } from '@/components/seo/json-ld';
 
 export function generateStaticParams() {
   return caseStudies.map((c) => ({ slug: c.slug }));
@@ -27,6 +28,13 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
 
   return (
     <>
+      <BreadcrumbLd
+        items={[
+          { name: 'Home', path: '/' },
+          { name: 'Work', path: '/work' },
+          { name: study.headline, path: `/work/${study.slug}` },
+        ]}
+      />
       <PageHero
         eyebrow={`${study.industry} · ${study.city}`}
         title={study.headline}
