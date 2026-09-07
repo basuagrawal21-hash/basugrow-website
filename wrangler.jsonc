@@ -4,10 +4,20 @@
   "main": ".open-next/worker.js",
   "compatibility_date": "2025-04-01",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "routes": [
+    { "pattern": "basugrow.com", "custom_domain": true },
+    { "pattern": "www.basugrow.com", "custom_domain": true }
+  ],
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
+  "kv_namespaces": [
+    {
+      "binding": "NEXT_INC_CACHE_KV",
+      "id": "db8ebea55d54451f9ce21a26e6d8e043"
+    }
+  ],
   "services": [
     {
       "binding": "WORKER_SELF_REFERENCE",
