@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { useConsent } from './analytics';
 
 /**
  * Fires the browser-side Lead conversion.
@@ -12,21 +11,38 @@ import { useConsent } from './analytics';
  * Conversions API so Meta deduplicates the pair.
  */
 export function LeadEvent({ eventId }: { eventId?: string }) {
-  const consent = useConsent();
   const fired = useRef(false);
 
   useEffect(() => {
-    if (consent !== 'granted' || fired.current) return;
+    // The pixel loads afterInteractive, so it may not exist on first paint.
+    // Without this retry the conversion would be dropped on fast navigations.
+    const attempt = () => {
+      if (fired.current) return true;
 
-    const fbq = (window as unknown as { fbq?: (...args: unknown[]) => void }).fbq;
-    if (fbq) {
-      fbq('track', 'Lead', {}, eventId ? { eventID: eventId } : undefined);
+      const w = window as unknown as {
+        fbq?: (...args: unknown[]) => void;
+        gtag?: (...args: unknown[]) => void;
+      };
+      if (!w.fbq) return false;
+
+      w.fbq('track', 'Lead', {}, eventId ? { eventID: eventId } : undefined);
+      if (w.gtag) w.gtag('event', 'generate_lead', { event_id: eventId });
       fired.current = true;
-    }
+      return true;
+    };
 
-    const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
-    if (gtag) gtag('event', 'generate_lead', { event_id: eventId });
-  }, [consent, eventId]);
+    if (attempt()) return;
+
+    const timer = setInterval(() => {
+      if (attempt()) clearInterval(timer);
+    }, 200);
+    const giveUp = setTimeout(() => clearInterval(timer), 10_000);
+
+    return () => {
+      clearInterval(timer);
+      clearTimeout(giveUp);
+    };
+  }, [eventId]);
 
   return null;
 }

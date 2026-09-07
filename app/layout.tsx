@@ -7,7 +7,6 @@ import { SmoothScroll } from '@/components/motion/smooth-scroll';
 import { FloatingActions, ScrollProgress } from '@/components/ui/floating-actions';
 import { OrganizationLd, WebSiteLd } from '@/components/seo/json-ld';
 import { Analytics } from '@/components/tracking/analytics';
-import { ConsentBar } from '@/components/tracking/consent-bar';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -52,7 +51,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </main>
         <SiteFooter />
         <FloatingActions />
-        <ConsentBar />
         <Analytics />
       </body>
     </html>
