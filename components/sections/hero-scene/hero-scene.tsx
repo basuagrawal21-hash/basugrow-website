@@ -3,7 +3,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { PerspectiveCamera } from '@react-three/drei';
-import type { SceneView } from './view';
+import { PX, cardsBottomY, phone, slotY, type SceneView } from './view';
 import {
   Color,
   ExtrudeGeometry,
@@ -37,17 +37,26 @@ import { paintCard, paintScreen } from './textures';
  * speed of an arrival.
  */
 
-const SLOT_Y = [1.3, 0.42, -0.46, -1.34, -2.22];
-const CARD_Z = 0.155;
-const SPAWN = new Vector3(2.6, 2.9, 4.3);
-const CONTROL = new Vector3(1.5, 2.0, 2.1);
+/** Same rhythm as the flat phone: three cards fading down, the fourth leaving. */
+const SLOT_Y = [0, 1, 2, 3].map(slotY);
+const SLOT_OPACITY = [1, 0.6, 0.28, 0];
+const MAX_CARDS = SLOT_Y.length;
+const DEPTH = 0.16;
+const BEVEL = 0.025;
+/** Just proud of the screen, which sits just proud of the body's front face. */
+const SCREEN_Z = DEPTH / 2 + 0.03 + 0.004;
+const CARD_Z = SCREEN_Z + 0.012;
+/** The brief's arc, with heights scaled to this shorter phone. */
+const Y_SCALE = phone.height / 5.22;
+const SPAWN = new Vector3(2.6, 2.9 * Y_SCALE + slotY(0), 4.3);
+const CONTROL = new Vector3(1.5, 2.0 * Y_SCALE + slotY(0), 2.1);
 const ARRIVAL_FRAMES = 45;
 const SETTLE = 0.16;
 const PARALLAX_DAMP = 0.055;
 const PULSE_DECAY = 0.045;
-/** Cards are clipped just under slot 3 so the leaving card fades out behind
-    the screen's footer instead of over it. */
-const CLIP_Y = -1.8;
+/** Cards are clipped at the bottom of the cards area, like the flat phone's
+    overflow, so the leaving card never draws over the frame. */
+const CLIP_Y = cardsBottomY;
 
 type Card = {
   mesh: Mesh<PlaneGeometry, MeshBasicMaterial>;
@@ -91,7 +100,7 @@ const UP = new Vector3(0, 1, 0);
  */
 class LeadStack {
   private cards: Card[] = [];
-  private nextLead: number = leadTiming.seeded;
+  private nextLead = 1;
   private elapsed = 0;
   private nextAt = leadTiming.firstArrivalMs / 1000;
   /** Arrival flash, 1 on landing, decaying to 0. */
@@ -101,9 +110,11 @@ class LeadStack {
     private group: Group,
     private assets: Assets,
   ) {
-    // Same newest-first seed as the flat phone, so the hand-off is invisible.
+    // The flat phone's first frame: lead 0 on top, then the leads before it,
+    // so the hand-off is invisible and arrivals continue its order.
+    const n = sampleLeads.length;
     for (let slot = 0; slot < leadTiming.seeded; slot++) {
-      this.cards.push(this.spawn(leadTiming.seeded - 1 - slot, slot, true));
+      this.cards.push(this.spawn((n - slot) % n, slot, true));
     }
   }
 
@@ -113,7 +124,7 @@ class LeadStack {
       transparent: true,
       toneMapped: false,
       depthWrite: false,
-      opacity: resting ? 1 : 0,
+      opacity: resting ? SLOT_OPACITY[slot] : 0,
       clippingPlanes: [this.assets.clip],
     });
     const mesh = new Mesh(this.assets.cardGeo, mat);
@@ -146,8 +157,8 @@ class LeadStack {
       for (const card of this.cards) card.slot += 1;
       const lead = this.nextLead++ % sampleLeads.length;
       this.cards.unshift(this.spawn(lead, 0, false));
-      // Five in the array at most; anything past that is already invisible.
-      while (this.cards.length > 5) this.retire(this.cards.pop()!);
+      // Three showing plus one leaving; anything past that is already invisible.
+      while (this.cards.length > MAX_CARDS) this.retire(this.cards.pop()!);
     }
 
     const settle = damp(SETTLE, f);
@@ -182,7 +193,7 @@ class LeadStack {
         mesh.position.x += (0 - mesh.position.x) * settle;
         mesh.position.y += (ty - mesh.position.y) * settle;
         mesh.position.z += (tz - mesh.position.z) * settle;
-        mat.opacity += ((card.slot >= 4 ? 0 : 1) - mat.opacity) * settle;
+        mat.opacity += ((SLOT_OPACITY[card.slot] ?? 0) - mat.opacity) * settle;
       }
     }
 
@@ -203,32 +214,38 @@ function Rig({ onReady }: { onReady: () => void }) {
   // Everything GPU-side is built once, imperatively, so it can be disposed
   // explicitly. Textures are painted by the caller after fonts load.
   const assets = useMemo(() => {
-    const body = new ExtrudeGeometry(roundedRect(2.52, 5.22, 0.34), {
-      depth: 0.2,
-      bevelEnabled: true,
-      bevelThickness: 0.035,
-      bevelSize: 0.03,
-      bevelSegments: 3,
-      curveSegments: 14,
-    });
+    // The flat phone's frame, 320 x 411.6 px, given a thin body. The bevel
+    // grows the outline by BEVEL on every side, so the shape is drawn that
+    // much smaller to land on the flat frame's exact size.
+    const body = new ExtrudeGeometry(
+      roundedRect(phone.width - 2 * BEVEL, phone.height - 2 * BEVEL, phone.radius - BEVEL),
+      {
+        depth: DEPTH,
+        bevelEnabled: true,
+        bevelThickness: 0.03,
+        bevelSize: BEVEL,
+        bevelSegments: 3,
+        curveSegments: 14,
+      },
+    );
     body.center();
     const screenTex = paintScreen();
     const cardTex: Texture[] = sampleLeads.map(paintCard);
     return {
       body,
-      // Ink, not the demo's #162A20: the token list has no such colour, and
-      // under the key and rim lights the difference does not survive anyway.
+      // Night, the flat frame's colour. The key and rim lights on the bevel
+      // stand in for its hairline border.
       bodyMat: new MeshStandardMaterial({
-        color: new Color('#14201a'),
+        color: new Color('#0c1b15'),
         roughness: 0.42,
         metalness: 0.55,
       }),
-      screenGeo: new PlaneGeometry(2.28, 4.96),
+      screenGeo: new PlaneGeometry(phone.screenW * PX, phone.screenH * PX),
       // Self-lit like a real screen, and exempt from tone mapping so the
       // baked token colours come out as the tokens.
       screenMat: new MeshBasicMaterial({ map: screenTex, transparent: true, toneMapped: false }),
       screenTex,
-      cardGeo: new PlaneGeometry(2.05, 0.75),
+      cardGeo: new PlaneGeometry(phone.cardW * PX, phone.cardH * PX),
       cardTex,
       clip: new Plane(),
     };
@@ -304,7 +321,7 @@ function Rig({ onReady }: { onReady: () => void }) {
         <mesh
           geometry={assets.screenGeo}
           material={assets.screenMat}
-          position={[0, 0, 0.142]}
+          position={[0, 0, SCREEN_Z]}
           renderOrder={1}
         />
         <group ref={stack} />

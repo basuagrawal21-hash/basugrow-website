@@ -14,12 +14,12 @@ import {
 } from 'react';
 import dynamic from 'next/dynamic';
 import { useMediaQuery, useReducedMotionPref } from '@/lib/use-media';
-import { FlatPhone } from './flat-phone';
+import { LeadTicker } from './lead-ticker';
 import { loadSceneFonts } from './hero-scene/fonts';
-import type { SceneView } from './hero-scene/view';
+import { phone as phoneDims, type SceneView } from './hero-scene/view';
 
 /**
- * The hero's right column. The flat phone is always rendered: it is in the
+ * The hero's right column. The flat phone (LeadTicker) is always rendered: it is in the
  * server HTML, it is the first thing painted, and its text is the accessible
  * version of the scene. The WebGL scene is an optional layer on top, loaded
  * only when the capability gate passes, and it takes over visually only once
@@ -40,7 +40,7 @@ function deviceCapable() {
 }
 
 /** Phone height in world units over visible height at fov 32, distance 11. */
-const PHONE_FILL = 5.22 / (2 * 11 * Math.tan((16 * Math.PI) / 180));
+const PHONE_FILL = phoneDims.height / (2 * 11 * Math.tan((16 * Math.PI) / 180));
 
 /** Any WebGL failure drops back to the flat phone, which never went away. */
 class SceneBoundary extends Component<{ onError: () => void; children: ReactNode }> {
@@ -137,7 +137,7 @@ export function HeroPhone() {
   return (
     <div ref={ref} className="hero-phone relative" data-scene={showing ? 'ready' : undefined}>
       <div className="hero-tilt">
-        <FlatPhone paused={gate} />
+        <LeadTicker paused={gate} />
       </div>
       {gate && fontsReady && layer && (
         <div aria-hidden className="scene-layer pointer-events-none absolute" style={layer.box}>

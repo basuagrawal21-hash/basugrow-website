@@ -19,8 +19,8 @@ export function Testimonials() {
             No reviews published yet
           </SectionTitle>
           <p className="text-slate prose-body mt-4 text-[1rem]">
-            BasuGrow is early, and we would rather show you nothing than write our own reviews.
-            When clients are happy to be named, their words and their numbers go here.
+            BasuGrow is early, and we would rather show you nothing than write our own reviews. When
+            clients are happy to be named, their words and their numbers go here.
           </p>
           <p className="text-slate prose-body mt-3 text-[1rem]">
             In the meantime, ask us for a reference on a call — we will put you in touch with

@@ -1,20 +1,22 @@
 import { CanvasTexture, SRGBColorSpace } from 'three';
 import { phoneScreen, type SampleLead } from '@/content/leads';
 import { sceneTokens } from './fonts';
+import { phone } from './view';
 
 /**
- * Text baked into CanvasTextures for the WebGL phone. Colours are read from
- * the design tokens at runtime so the scene cannot drift from the CSS.
+ * Text baked into CanvasTextures for the WebGL phone. The layout is the flat
+ * LeadTicker's, measured in CSS px, so the 3D phone and the flat one are the
+ * same design. Colours are read from the design tokens at runtime.
  *
- * Call only after `loadSceneFonts()` (./fonts) resolves, or the canvas silently falls
- * back to a system face and the texture is wrong for the life of the scene.
+ * Call only after `loadSceneFonts()` (./fonts) resolves, or the canvas silently
+ * falls back to a system face and the texture is wrong for the life of the scene.
  */
 const SCALE = 2;
 
 function surface(w: number, h: number) {
   const canvas = document.createElement('canvas');
-  canvas.width = w * SCALE;
-  canvas.height = h * SCALE;
+  canvas.width = Math.round(w * SCALE);
+  canvas.height = Math.round(h * SCALE);
   const ctx = canvas.getContext('2d')!;
   ctx.scale(SCALE, SCALE);
   ctx.textBaseline = 'alphabetic';
@@ -33,128 +35,123 @@ function alpha(hex: string, a: number) {
   return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`;
 }
 
-/** WhatsApp's double tick, drawn rather than typed so no glyph fallback. */
+/** `fg` at `a` over `bg`, as an opaque colour — a card has to hide what is behind it. */
+function over(fg: string, bg: string, a: number) {
+  const f = parseInt(fg.slice(1), 16);
+  const b = parseInt(bg.slice(1), 16);
+  const ch = (s: number) => Math.round(a * ((f >> s) & 255) + (1 - a) * ((b >> s) & 255));
+  return `rgb(${ch(16)}, ${ch(8)}, ${ch(0)})`;
+}
+
+/** WhatsApp's double tick (lucide CheckCheck at 12px), drawn so no glyph fallback. */
 function ticks(ctx: CanvasRenderingContext2D, x: number, y: number, color: string) {
   ctx.strokeStyle = color;
-  ctx.lineWidth = 1.4;
+  ctx.lineWidth = 1.2;
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
   ctx.beginPath();
-  ctx.moveTo(x, y);
-  ctx.lineTo(x + 3, y + 3);
-  ctx.lineTo(x + 8.5, y - 3.5);
-  ctx.moveTo(x + 5.5, y + 3);
-  ctx.lineTo(x + 12, y - 3.5);
+  ctx.moveTo(x, y + 0.5);
+  ctx.lineTo(x + 2.8, y + 3.2);
+  ctx.lineTo(x + 8, y - 2.5);
+  ctx.moveTo(x + 5.2, y + 3.2);
+  ctx.lineTo(x + 11, y - 2.5);
   ctx.stroke();
 }
 
-/** 300 x 620 screen: status bar, header, and the footer that keeps it full. */
+/** Status bar, header and divider — the parts of the screen that never move. */
 export function paintScreen() {
   const { palette: p, fonts } = sceneTokens();
   const { display, body } = fonts;
-  const W = 300;
-  const H = 620;
+  const W = phone.screenW;
+  const H = phone.screenH;
   const { canvas, ctx } = surface(W, H);
 
   ctx.beginPath();
-  ctx.roundRect(0, 0, W, H, 30);
-  ctx.fillStyle = p.night;
+  ctx.roundRect(0, 0, W, H, phone.screenRadius);
+  ctx.fillStyle = p.pine;
   ctx.fill();
 
   // Status bar
-  ctx.fillStyle = alpha(p.bone, 0.8);
-  ctx.font = `800 12px ${display}`;
-  ctx.fillText(phoneScreen.time, 26, 26);
-  ctx.fillStyle = p.lichen;
-  [4, 6, 8, 10].forEach((h, i) => ctx.fillRect(236 + i * 3.5, 26 - h, 2.2, h));
-  ctx.strokeStyle = p.lichen;
+  const muted = alpha(p.bone, 0.45);
+  ctx.fillStyle = muted;
+  ctx.font = `800 11px ${display}`;
+  ctx.fillText(phoneScreen.time, 20, 25);
+  // signal
+  [3, 5, 7, 9].forEach((h, i) => ctx.fillRect(230 + i * 2.6, 25 - h, 1.6, h));
+  // wifi
+  ctx.strokeStyle = muted;
   ctx.lineWidth = 1.2;
+  ctx.lineCap = 'round';
+  for (const r of [2.5, 5, 7.5]) {
+    ctx.beginPath();
+    ctx.arc(250, 25, r, -Math.PI * 0.78, -Math.PI * 0.22);
+    ctx.stroke();
+  }
+  // battery
   ctx.beginPath();
-  ctx.roundRect(254, 17.5, 19, 9, 2.5);
+  ctx.roundRect(261.5, 16.5, 13, 8, 2);
   ctx.stroke();
-  ctx.fillRect(256, 19.5, 13, 5);
-  ctx.fillRect(274, 20, 1.6, 4);
+  ctx.fillRect(263.5, 18.5, 9, 4);
+  ctx.fillRect(275.5, 19, 1.4, 3);
 
   // Header
   ctx.beginPath();
-  ctx.arc(40, 58, 17, 0, Math.PI * 2);
+  ctx.arc(38, 55.6, 18, 0, Math.PI * 2);
   ctx.fillStyle = alpha(p.willow, 0.15);
   ctx.fill();
-  ctx.strokeStyle = alpha(p.willow, 0.25);
-  ctx.lineWidth = 1;
-  ctx.stroke();
   ctx.fillStyle = p.willow;
-  ctx.font = `800 12.5px ${display}`;
+  ctx.font = `600 13px ${body}`;
   ctx.textAlign = 'center';
-  ctx.fillText(phoneScreen.avatar, 40, 62.5);
+  ctx.fillText(phoneScreen.avatar, 38, 60);
   ctx.textAlign = 'left';
 
   ctx.fillStyle = p.bone;
-  ctx.font = `800 17px ${display}`;
-  ctx.fillText(phoneScreen.title, 68, 55);
+  ctx.font = `600 14px ${body}`;
+  ctx.fillText(phoneScreen.title, 68, 53);
   ctx.fillStyle = p.willow;
   ctx.font = `400 12px ${body}`;
-  ctx.fillText(phoneScreen.subtitle, 68, 72);
+  ctx.fillText(phoneScreen.subtitle, 68, 68.5);
 
   ctx.fillStyle = alpha(p.bone, 0.1);
-  ctx.fillRect(22, 88, W - 44, 1);
-
-  // Footer, under the fourth slot
-  ctx.fillRect(22, 540, W - 44, 1);
-  ctx.font = `400 12px ${body}`;
-  ctx.fillStyle = p.lichen;
-  ctx.fillText(phoneScreen.footerLabel, 22, 562);
-  ctx.textAlign = 'right';
-  ctx.font = `600 12px ${body}`;
-  ctx.fillStyle = alpha(p.bone, 0.8);
-  ctx.fillText(phoneScreen.footerCount, W - 22, 562);
-  ctx.textAlign = 'left';
-  ctx.font = `400 11px ${body}`;
-  ctx.fillStyle = p.lichen;
-  ctx.fillText(phoneScreen.footerNote, 22, 580);
+  ctx.fillRect(0, 88, W, 1);
 
   return texture(canvas);
 }
 
-/** 360 x 132 lead card. */
+/** One lead card, 269 x 84 px, in the flat phone's style. */
 export function paintCard(lead: SampleLead) {
   const { palette: p, fonts } = sceneTokens();
   const { display, body } = fonts;
-  const W = 360;
-  const H = 132;
+  const W = phone.cardW;
+  const H = phone.cardH;
   const { canvas, ctx } = surface(W, H);
 
   ctx.beginPath();
-  ctx.roundRect(0.5, 0.5, W - 1, H - 1, 18);
-  ctx.fillStyle = p.pine;
+  ctx.roundRect(0.75, 0.75, W - 1.5, H - 1.5, 16);
+  ctx.fillStyle = over(p.bone, p.pine, 0.04);
   ctx.fill();
-  ctx.save();
-  ctx.clip();
-  ctx.fillStyle = p.willow;
-  ctx.fillRect(0, 0, 4.5, H);
-  ctx.restore();
-  ctx.strokeStyle = alpha(p.willow, 0.22);
-  ctx.lineWidth = 1;
+  ctx.strokeStyle = over(p.bone, p.pine, 0.1);
+  ctx.lineWidth = 1.5;
   ctx.stroke();
 
   ctx.fillStyle = p.bone;
-  ctx.font = `800 23px ${display}`;
-  ctx.fillText(lead.name, 24, 40);
+  ctx.font = `600 15px ${body}`;
+  ctx.fillText(lead.name, 15.5, 28.5);
 
-  ctx.fillStyle = p.lichen;
-  ctx.font = `400 13px ${body}`;
+  ctx.fillStyle = alpha(p.bone, 0.4);
+  ctx.font = `800 11px ${display}`;
   ctx.textAlign = 'right';
-  ctx.fillText(phoneScreen.arrivedLabel, W - 20, 36);
+  ctx.fillText(phoneScreen.arrivedLabel, 253.5, 29);
   ctx.textAlign = 'left';
 
   ctx.fillStyle = p.willow;
-  ctx.font = `400 16px ${body}`;
-  ctx.fillText(lead.enquiry, 24, 72);
+  ctx.font = `400 13px ${body}`;
+  ctx.fillText(lead.enquiry, 15.5, 52);
 
-  ticks(ctx, 24, 98, alpha(p.willow, 0.7));
-  ctx.fillStyle = p.lichen;
-  ctx.font = `400 14px ${body}`;
-  ctx.fillText(lead.place, 42, 103);
+  ticks(ctx, 15.5, 71.5, alpha(p.willow, 0.7));
+  ctx.fillStyle = alpha(p.bone, 0.45);
+  ctx.font = `400 12px ${body}`;
+  ctx.fillText(lead.place, 33.5, 76);
 
   return texture(canvas);
 }

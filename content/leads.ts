@@ -1,8 +1,7 @@
 /**
- * The hero phone's sample inbox. Shared by the flat CSS phone and the WebGL
- * scene so the two can never drift apart.
+ * The hero phone's sample inbox.
  *
- * These names, enquiries and figures are illustrative. The caption is what
+ * These names and enquiries are illustrative. The caption is what
  * says so on the page — it renders wherever the phone does and is not
  * optional. Do not swap in real client names without written permission.
  */
@@ -29,16 +28,13 @@ export const phoneScreen = {
   title: 'New leads',
   subtitle: 'delivered instantly',
   arrivedLabel: 'now',
-  footerLabel: 'Earlier today',
-  footerCount: '14 enquiries',
-  footerNote: 'Average reply time 6 min',
   caption: 'Sample — illustrative names and enquiries',
 } as const;
 
-/** Arrival cadence, shared by both renderers. */
+/** WebGL arrival cadence. The flat phone keeps its own 2.2s tick. */
 export const leadTiming = {
   firstArrivalMs: 2400,
   intervalMs: 2800,
-  /** Cards resting on the screen before anything arrives. */
-  seeded: 4,
+  /** Cards resting on the screen before anything arrives, as on the flat phone. */
+  seeded: 3,
 } as const;

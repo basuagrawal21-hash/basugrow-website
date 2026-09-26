@@ -20,9 +20,9 @@ export async function loadSceneFonts() {
   // `fonts.ready` alone is not enough: a weight the page has not used yet is
   // never requested, so ask for each face the textures draw with.
   await Promise.all([
-    document.fonts.load(`800 23px ${fonts.display}`),
-    document.fonts.load(`400 16px ${fonts.body}`),
-    document.fonts.load(`600 16px ${fonts.body}`),
+    document.fonts.load(`800 11px ${fonts.display}`),
+    document.fonts.load(`400 13px ${fonts.body}`),
+    document.fonts.load(`600 15px ${fonts.body}`),
   ]);
   await document.fonts.ready;
   resolved = {

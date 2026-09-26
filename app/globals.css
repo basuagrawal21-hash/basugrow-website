@@ -396,131 +396,23 @@
   }
 }
 
-/* ---------------------------------------------------------------------------
-   Hero flat phone.
-
-   Lit the way the WebGL phone is: a warm gold key from the front-left and a
-   willow rim from the back-right, done as a gradient on the bezel instead of
-   lights. Every colour is a token or a mix of two.
---------------------------------------------------------------------------- */
-
+/* Hero lead ticker: each card sits in a slot via an inline transform and
+   opacity; this is the move between slots. A card wrapping from the bottom
+   back to the parked position above is invisible, so it jumps. */
 @layer components {
-  .flat-phone {
-    --card-h: 5rem;
-    --step: 5.625rem;
-  }
-
-  .phone-body {
-    background:
-      linear-gradient(
-        150deg,
-        color-mix(in srgb, var(--color-gold) 22%, var(--color-ink)) 0%,
-        var(--color-ink) 24%,
-        var(--color-ink) 68%,
-        color-mix(in srgb, var(--color-willow) 30%, var(--color-ink)) 100%
-      );
-    box-shadow:
-      inset 0 0 0 1px color-mix(in srgb, var(--color-bone) 9%, transparent),
-      0 30px 60px -30px color-mix(in srgb, var(--color-willow) 18%, transparent);
-  }
-
-  /* Side keys, so the frame reads as a held object rather than a rectangle. */
-  .phone-key {
-    position: absolute;
-    left: -2px;
-    width: 3px;
-    border-radius: 2px 0 0 2px;
-    background: color-mix(in srgb, var(--color-gold) 16%, var(--color-ink));
-  }
-
-  .phone-screen {
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-bone) 6%, transparent);
-  }
-
-  /* Four resting slots; the fifth sits under the fold, fading out. */
-  /* Clipped at the bottom only: the leaving card must not fade out over the
-     footer, but the arriving card needs room to come in from above. */
-  .lead-stack {
-    height: calc(3 * var(--step) + var(--card-h));
-    clip-path: inset(-3rem -2rem 0 -2rem);
-  }
-
-  .lead-slot {
-    position: absolute;
-    inset-inline: 0;
-    top: 0;
-    height: var(--card-h);
-    transform: translate3d(0, calc(var(--slot) * var(--step)), 0);
+  .lead-card {
     transition:
-      transform 650ms var(--ease-brand),
-      opacity 450ms var(--ease-brand);
+      transform 500ms var(--ease-brand),
+      opacity 500ms var(--ease-brand);
   }
 
-  .lead-slot[data-leaving] {
-    opacity: 0;
-  }
-
-  /* A slip of paper settling, not a banking spaceship: arrives from the upper
-     right on a slight arc, turns a couple of degrees and lands flat. */
-  .lead-arrive {
-    animation: lead-arrive 720ms var(--ease-brand) both;
-  }
-
-  /* The WhatsApp ping: one willow flash at the top of the screen per arrival. */
-  .screen-pulse {
-    position: absolute;
-    inset: -30% -20% auto;
-    height: 70%;
-    z-index: -1;
-    pointer-events: none;
-    background: radial-gradient(
-      closest-side,
-      color-mix(in srgb, var(--color-willow) 26%, transparent),
-      transparent
-    );
-    opacity: 0;
-    animation: screen-pulse 1100ms ease-out 380ms both;
-  }
-}
-
-@keyframes lead-arrive {
-  0% {
-    opacity: 0;
-    transform: translate3d(18px, -30px, 0) rotate(-2.5deg) scale(0.96);
-  }
-  45% {
-    opacity: 1;
-  }
-  70% {
-    transform: translate3d(0, 2px, 0) rotate(0.6deg) scale(1);
-  }
-  100% {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@keyframes screen-pulse {
-  0% {
-    opacity: 0;
-  }
-  18% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .lead-arrive,
-  .screen-pulse {
-    animation: none;
+  .lead-card[data-wrapping] {
+    transition: none;
   }
 }
 
 /* The WebGL layer takes over only after it has drawn. The flat phone stays in
-   the DOM underneath as the accessible version; only its body is faded. */
+   the DOM underneath as the accessible version; only its frame is faded. */
 @layer components {
   .scene-layer {
     opacity: 0;
