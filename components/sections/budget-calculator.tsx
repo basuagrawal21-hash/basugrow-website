@@ -75,7 +75,9 @@ export function BudgetCalculator() {
           </p>
           <p className="text-slate mt-2 text-[0.9375rem]">
             a month in ad spend — about{' '}
-            <span className="text-ink tnum font-medium">{inr(Math.round(result.dailyBudget))}</span>{' '}
+            <span className="text-ink font-medium tnum">
+              {inr(Math.round(result.dailyBudget))}
+            </span>{' '}
             a day
           </p>
 

@@ -20,7 +20,7 @@ export function ServicesGrid() {
       <ul className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         {services.map((service) => (
           <li key={service.slug} className="h-full">
-            <SpotlightCard className="bg-bone h-full">
+            <SpotlightCard className="h-full bg-bone">
               <Link
                 href={`/services/${service.slug}`}
                 className="group/card flex h-full flex-col p-7 focus:outline-none"

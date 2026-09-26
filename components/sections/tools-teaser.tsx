@@ -28,9 +28,9 @@ export function ToolsTeaser() {
         <Eyebrow>Free tools</Eyebrow>
         <SectionTitle>Do the maths before you talk to anyone</SectionTitle>
         <Lede>
-          Both are free, work in your browser, and ask for nothing. No email wall, no &ldquo;book a
-          call to see your results&rdquo;. If the numbers say ads are not worth it for you, that is
-          a useful answer too.
+          Both are free, work in your browser, and ask for nothing. No email wall, no
+          &ldquo;book a call to see your results&rdquo;. If the numbers say ads are not worth it for
+          you, that is a useful answer too.
         </Lede>
       </div>
 
