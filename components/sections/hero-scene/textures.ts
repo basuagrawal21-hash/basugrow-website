@@ -58,13 +58,31 @@ function ticks(ctx: CanvasRenderingContext2D, x: number, y: number, color: strin
   ctx.stroke();
 }
 
-/** Status bar, header and divider — the parts of the screen that never move. */
+/**
+ * The whole front of the phone, painted exactly like the flat one: a night
+ * frame with the 1.5px bone/12 hairline, and inside it the screen's status
+ * bar, header and divider — everything that never moves. Painting the frame
+ * (rather than lighting the body's front face) keeps it the flat design's
+ * colour instead of a dark lit slab.
+ */
 export function paintScreen() {
   const { palette: p, fonts } = sceneTokens();
   const { display, body } = fonts;
+  const { canvas, ctx } = surface(phone.frameW, phone.frameH);
+
+  ctx.beginPath();
+  ctx.roundRect(0, 0, phone.frameW, phone.frameH, phone.frameRadius);
+  ctx.fillStyle = p.night;
+  ctx.fill();
+  ctx.beginPath();
+  ctx.roundRect(0.75, 0.75, phone.frameW - 1.5, phone.frameH - 1.5, phone.frameRadius - 0.75);
+  ctx.strokeStyle = alpha(p.bone, 0.12);
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  ctx.translate(phone.screenInset, phone.screenInset);
   const W = phone.screenW;
   const H = phone.screenH;
-  const { canvas, ctx } = surface(W, H);
 
   ctx.beginPath();
   ctx.roundRect(0, 0, W, H, phone.screenRadius);

@@ -14,10 +14,14 @@ export const PX = 2.52 / 320;
 
 export const phone = {
   /** Outer frame, 320 x 411.6 px, radius 36 px (rounded-[2.25rem]). */
+  frameW: 320,
+  frameH: 411.6,
+  frameRadius: 36,
   width: 320 * PX,
   height: 411.6 * PX,
   radius: 36 * PX,
-  /** Screen inset by padding + border, radius 28 px (rounded-[1.75rem]). */
+  /** Screen inset 11.5 px (padding + border), radius 28 px (rounded-[1.75rem]). */
+  screenInset: 11.5,
   screenW: 297,
   screenH: 388.6,
   screenRadius: 28,

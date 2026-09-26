@@ -233,14 +233,15 @@ function Rig({ onReady }: { onReady: () => void }) {
     const cardTex: Texture[] = sampleLeads.map(paintCard);
     return {
       body,
-      // Night, the flat frame's colour. The key and rim lights on the bevel
-      // stand in for its hairline border.
+      // The front is a painted plane; the body only shows as the thin edge when
+      // the phone tilts. Matte night, not metal: metal with no environment to
+      // reflect renders as a black slab.
       bodyMat: new MeshStandardMaterial({
         color: new Color('#0c1b15'),
-        roughness: 0.42,
-        metalness: 0.55,
+        roughness: 0.6,
+        metalness: 0,
       }),
-      screenGeo: new PlaneGeometry(phone.screenW * PX, phone.screenH * PX),
+      screenGeo: new PlaneGeometry(phone.width, phone.height),
       // Self-lit like a real screen, and exempt from tone mapping so the
       // baked token colours come out as the tokens.
       screenMat: new MeshBasicMaterial({ map: screenTex, transparent: true, toneMapped: false }),
