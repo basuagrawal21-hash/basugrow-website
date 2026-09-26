@@ -1,25 +1,46 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import { useScrolledPast, useScrolledRatio } from '@/lib/use-scroll';
 import { ArrowUp, MessageCircle } from 'lucide-react';
-import { motion, useReducedMotion, useScroll, useSpring } from 'motion/react';
 import { site, whatsappLink } from '@/content/site';
 
-/** Thin willow progress bar pinned to the top of the viewport. */
+/**
+ * Thin willow progress bar pinned to the top of the viewport. One passive,
+ * rAF-throttled scroll listener writes a transform; a short CSS transition
+ * does the smoothing a spring used to, without a JS animation library.
+ */
 export function ScrollProgress() {
-  const { scrollYProgress } = useScroll();
-  const reduced = useReducedMotion();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 180,
-    damping: 30,
-    restDelta: 0.001,
-  });
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    let frame = 0;
+    const paint = () => {
+      frame = 0;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      el.style.transform = `scaleX(${max > 0 ? Math.min(1, window.scrollY / max) : 0})`;
+    };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(paint);
+    };
+    paint();
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+    };
+  }, []);
 
   return (
-    <motion.div
+    <div
+      ref={ref}
       aria-hidden
-      className="bg-willow fixed inset-x-0 top-0 z-[60] h-[3px] origin-left"
-      style={{ scaleX: reduced ? scrollYProgress : scaleX }}
+      className="bg-willow fixed inset-x-0 top-0 z-[60] h-[3px] origin-left transition-transform duration-150 ease-out"
+      style={{ transform: 'scaleX(0)' }}
     />
   );
 }

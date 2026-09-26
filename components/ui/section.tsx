@@ -21,6 +21,14 @@ const lightSurfaces: Record<'bone' | 'sand', string> = {
  *
  * The hero and footer are deliberately still full-bleed — a hard edge at the
  * very top and very bottom of a page is a boundary, not an interruption.
+ *
+ * `backdrop` is the light surface a night block floats on. Match it to the
+ * bands either side, or the block gets a frame of the wrong colour.
+ *
+ * Padding: a night section's vertical padding lives on the inner block, while
+ * `className` lands on the outer <section> and `containerClassName` on the
+ * content inside the padding. So a py-* override that works on a light
+ * section silently does nothing on night. Change --spacing-section instead.
  */
 export function Section({
   children,
@@ -29,6 +37,7 @@ export function Section({
   className,
   containerClassName,
   glow = true,
+  backdrop = 'bone',
 }: {
   children: ReactNode;
   surface?: Surface;
@@ -36,12 +45,13 @@ export function Section({
   className?: string;
   containerClassName?: string;
   glow?: boolean;
+  backdrop?: 'bone' | 'sand';
 }) {
   if (surface === 'night') {
     return (
-      <section id={id} className={cn('bg-bone', className)}>
+      <section id={id} className={cn(lightSurfaces[backdrop], className)}>
         <div className="container-page">
-          <div className="bg-night text-bone relative isolate overflow-hidden rounded-[1.75rem] px-6 py-[var(--spacing-section)] md:rounded-[2.5rem] md:px-12 lg:px-16">
+          <div className="bg-night text-bone relative isolate overflow-hidden rounded-[1.75rem] px-4 py-[var(--spacing-section)] sm:px-6 md:rounded-[2.5rem] md:px-12 lg:px-16">
             {glow && <CursorGlow />}
             <div className={cn('relative z-10', containerClassName)}>{children}</div>
           </div>

@@ -31,8 +31,10 @@ export function SiteFooter() {
   return (
     <footer className="bg-night text-bone">
       <div className="container-page py-16 md:py-20">
-        <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
-          <div>
+        {/* Two link columns side by side on phones; the brand block spans both.
+            Stacked single-file, the footer alone was 2,000px on a phone. */}
+        <div className="grid grid-cols-2 gap-x-6 gap-y-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+          <div className="col-span-2 lg:col-span-1">
             <Logo tone="light" />
             <p className="prose-body text-bone/65 mt-5 text-[0.9375rem]">
               Meta ads and lead systems for local businesses across India. We build the offer, the

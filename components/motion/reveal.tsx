@@ -1,39 +1,54 @@
 'use client';
 
-import { type ReactNode } from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import { useEffect, useRef, type CSSProperties, type ReactNode, type RefObject } from 'react';
 
 /**
  * Scroll reveal. Used on exactly three home sections — Results, Pricing and
  * the final CTA. Putting this on every section is the tell of a generated
  * page, so it is deliberately not a default wrapper.
+ *
+ * Content is never hidden. The server HTML is at rest and fully opaque, so a
+ * slow connection, a fast scroller or a failed script all see the real thing.
+ * After hydration, anything still below the fold is nudged down a few pixels
+ * while it is off screen, and rises into place when it scrolls in. Anything
+ * already on screen is left alone, so nothing visibly jumps.
  */
 export function Reveal({
   children,
   className,
   delay = 0,
-  as = 'div',
+  as: Tag = 'div',
 }: {
   children: ReactNode;
   className?: string;
   delay?: number;
   as?: 'div' | 'section' | 'li';
 }) {
-  const reduced = useReducedMotion();
-  const Tag = motion[as];
+  const ref = useRef<HTMLElement>(null);
 
-  if (reduced) {
-    const Plain = as;
-    return <Plain className={className}>{children}</Plain>;
-  }
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (el.getBoundingClientRect().top < window.innerHeight) return;
+
+    el.dataset.reveal = 'pending';
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        el.dataset.reveal = 'in';
+        io.disconnect();
+      },
+      { rootMargin: '0px 0px -60px 0px' },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   return (
     <Tag
+      ref={ref as RefObject<HTMLDivElement & HTMLLIElement>}
       className={className}
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-80px' }}
-      transition={{ duration: 0.55, delay, ease: [0.2, 0.8, 0.2, 1] }}
+      style={{ ['--reveal-delay' as string]: `${delay}s` } as CSSProperties}
     >
       {children}
     </Tag>

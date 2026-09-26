@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion, useReducedMotion } from 'motion/react';
 import { Menu, X, MessageCircle } from 'lucide-react';
 import { nav, site, whatsappLink } from '@/content/site';
 import { Logo } from '@/components/ui/logo';
@@ -42,7 +41,6 @@ export function SiteHeader() {
   }
 
   // --- Glass pill indicator (desktop nav only) ------------------------------
-  const reducedMotion = useReducedMotion();
   const [hoveredHref, setHoveredHref] = useState<string | null>(null);
   const activeHref = useMemo(
     () => nav.find((item) => isNavItemActive(pathname, item.href))?.href ?? null,
@@ -126,19 +124,16 @@ export function SiteHeader() {
           className="relative hidden items-center gap-1 lg:flex"
         >
           {pill && (
-            <motion.span
+            // Spring-like slide via a CSS transition with a little overshoot.
+            // It has no previous position on first render, so it appears in
+            // place; the global reduced-motion rule makes it instant.
+            <span
               aria-hidden
               className={cn(
-                'absolute inset-y-1 rounded-full border backdrop-blur-md',
+                'absolute inset-y-1 rounded-full border backdrop-blur-md transition-[left,width,background-color,border-color] duration-[380ms] ease-[cubic-bezier(0.34,1.4,0.64,1)]',
                 isHovering ? 'bg-bone/12 border-bone/18' : 'bg-bone/8 border-bone/12',
               )}
-              initial={false}
-              animate={{ left: pill.left, width: pill.width, opacity: 1 }}
-              transition={
-                reducedMotion
-                  ? { duration: 0 }
-                  : { type: 'spring', stiffness: 380, damping: 32 }
-              }
+              style={{ left: pill.left, width: pill.width }}
             />
           )}
 

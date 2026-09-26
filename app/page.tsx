@@ -13,8 +13,10 @@ import { FinalCta } from '@/components/sections/final-cta';
 import { FaqLd } from '@/components/seo/json-ld';
 import { homeFaqs } from '@/content/faqs';
 
-/* Surfaces alternate: night, bone, bone, sand, bone, NIGHT, bone, sand, bone,
-   sand, bone, NIGHT. Three dark sections on the page, no more. */
+/* Surfaces: night (hero), bone, bone, sand, NIGHT (how it works), sand
+   (results), bone, sand, bone, NIGHT (pricing), bone, NIGHT (final CTA).
+   Three dark mid-page beats, never two in a row, and sand keeps the quieter
+   bands. */
 export default function HomePage() {
   return (
     <>
@@ -28,7 +30,7 @@ export default function HomePage() {
       <IndustriesGrid />
       <ToolsTeaser />
       <Testimonials />
-      <PricingTable surface="sand" />
+      <PricingTable surface="night" />
       <FaqSection surface="bone" />
       <FinalCta />
     </>

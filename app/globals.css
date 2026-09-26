@@ -27,6 +27,8 @@
   --color-moss: #2e5f49; /* brand green FOR LIGHT surfaces. Safe for text. */
   --color-willow: #8acb88; /* brand green FOR DARK surfaces. Never on light. */
   --color-gold: #ffbf46; /* the accent: CTAs and one highlighter per screen */
+  --color-pine: #0f2a23; /* raised dark surface: cards and screens on night */
+  --color-lichen: #7e9186; /* muted text on dark. Pine is the lightest it sits on. */
 
   /*
     Contrast, measured with scripts/contrast.mjs, not estimated:
@@ -40,6 +42,9 @@
       gold/night     10.81:1   gold on dark                    AA + AAA
       ink/gold       10.22:1   text on gold CTAs               AA + AAA
       ink/willow      8.77:1   text on a green fill            AA + AAA
+      lichen/night    5.31:1   muted text on dark              AA
+      lichen/pine     4.57:1   muted text on a dark card       AA
+      willow/pine     7.98:1   green on a dark card            AA + AAA
       willow/bone     1.75:1   FAILS — willow never on cream, use moss
       gold/bone       1.50:1   FAILS — gold is a fill, never text on light
   */
@@ -61,7 +66,7 @@
   --radius-card: 18px;
 
   /* Vertical rhythm between sections. */
-  --spacing-section: clamp(5rem, 10vw, 9rem);
+  --spacing-section: clamp(4rem, 8vw, 7rem);
   --spacing-content: 1200px;
 
   --ease-brand: cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -379,33 +384,208 @@
 /* ---------------------------------------------------------------------------
    Hero gold marker.
 
-   Deliberately CSS rather than JS. The marker is the only thing making the
-   word on top of it readable — it is ink-coloured text on a night background —
-   so its resting state must be "visible" and it must not depend on hydration.
-   A JS animation starting at scaleX(0) renders an invisible word in the SSR
-   HTML, which is wrong for crawlers and broken if the script never runs.
+   Static, on purpose. The marker is the only thing making the word on top of
+   it readable — ink text on a night background — so it cannot animate in from
+   nothing. It used to wipe in from scaleX(0) after 480ms, which meant the
+   headline's key word was invisible in the first painted frame.
 --------------------------------------------------------------------------- */
 
 @layer components {
   .hero-marker {
-    transform-origin: left center;
-    transform: skewX(-4deg) scaleX(1);
-    animation: marker-wipe 450ms var(--ease-brand) 480ms both;
+    transform: skewX(-4deg);
   }
 }
 
-@keyframes marker-wipe {
-  from {
-    transform: skewX(-4deg) scaleX(0);
+/* ---------------------------------------------------------------------------
+   Hero flat phone.
+
+   Lit the way the WebGL phone is: a warm gold key from the front-left and a
+   willow rim from the back-right, done as a gradient on the bezel instead of
+   lights. Every colour is a token or a mix of two.
+--------------------------------------------------------------------------- */
+
+@layer components {
+  .flat-phone {
+    --card-h: 5rem;
+    --step: 5.625rem;
   }
-  to {
-    transform: skewX(-4deg) scaleX(1);
+
+  .phone-body {
+    background:
+      linear-gradient(
+        150deg,
+        color-mix(in srgb, var(--color-gold) 22%, var(--color-ink)) 0%,
+        var(--color-ink) 24%,
+        var(--color-ink) 68%,
+        color-mix(in srgb, var(--color-willow) 30%, var(--color-ink)) 100%
+      );
+    box-shadow:
+      inset 0 0 0 1px color-mix(in srgb, var(--color-bone) 9%, transparent),
+      0 30px 60px -30px color-mix(in srgb, var(--color-willow) 18%, transparent);
+  }
+
+  /* Side keys, so the frame reads as a held object rather than a rectangle. */
+  .phone-key {
+    position: absolute;
+    left: -2px;
+    width: 3px;
+    border-radius: 2px 0 0 2px;
+    background: color-mix(in srgb, var(--color-gold) 16%, var(--color-ink));
+  }
+
+  .phone-screen {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-bone) 6%, transparent);
+  }
+
+  /* Four resting slots; the fifth sits under the fold, fading out. */
+  /* Clipped at the bottom only: the leaving card must not fade out over the
+     footer, but the arriving card needs room to come in from above. */
+  .lead-stack {
+    height: calc(3 * var(--step) + var(--card-h));
+    clip-path: inset(-3rem -2rem 0 -2rem);
+  }
+
+  .lead-slot {
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: var(--card-h);
+    transform: translate3d(0, calc(var(--slot) * var(--step)), 0);
+    transition:
+      transform 650ms var(--ease-brand),
+      opacity 450ms var(--ease-brand);
+  }
+
+  .lead-slot[data-leaving] {
+    opacity: 0;
+  }
+
+  /* A slip of paper settling, not a banking spaceship: arrives from the upper
+     right on a slight arc, turns a couple of degrees and lands flat. */
+  .lead-arrive {
+    animation: lead-arrive 720ms var(--ease-brand) both;
+  }
+
+  /* The WhatsApp ping: one willow flash at the top of the screen per arrival. */
+  .screen-pulse {
+    position: absolute;
+    inset: -30% -20% auto;
+    height: 70%;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(
+      closest-side,
+      color-mix(in srgb, var(--color-willow) 26%, transparent),
+      transparent
+    );
+    opacity: 0;
+    animation: screen-pulse 1100ms ease-out 380ms both;
+  }
+}
+
+@keyframes lead-arrive {
+  0% {
+    opacity: 0;
+    transform: translate3d(18px, -30px, 0) rotate(-2.5deg) scale(0.96);
+  }
+  45% {
+    opacity: 1;
+  }
+  70% {
+    transform: translate3d(0, 2px, 0) rotate(0.6deg) scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes screen-pulse {
+  0% {
+    opacity: 0;
+  }
+  18% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-marker {
+  .lead-arrive,
+  .screen-pulse {
     animation: none;
-    transform: skewX(-4deg) scaleX(1);
   }
+}
+
+/* The WebGL layer takes over only after it has drawn. The flat phone stays in
+   the DOM underneath as the accessible version; only its body is faded. */
+@layer components {
+  .scene-layer {
+    opacity: 0;
+    transition: opacity 450ms var(--ease-brand);
+  }
+
+  .hero-phone .phone-body {
+    transition: opacity 450ms var(--ease-brand);
+  }
+
+  .hero-phone[data-scene='ready'] .scene-layer {
+    opacity: 1;
+  }
+
+  .hero-phone[data-scene='ready'] .phone-body {
+    opacity: 0;
+  }
+}
+
+/* Stat figures never change value. On first view a moss rule draws in under
+   the number; with reduced motion it is simply there. */
+@layer components {
+  .stat-figure {
+    position: relative;
+    display: inline-block;
+  }
+
+  .stat-figure::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -0.35rem;
+    width: 2.25rem;
+    height: 2px;
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--color-moss) 55%, transparent);
+    transform-origin: left center;
+  }
+
+  .stat-figure.is-seen::after {
+    animation: stat-rule 600ms var(--ease-brand) both;
+  }
+}
+
+@keyframes stat-rule {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Reveal: transform only, never opacity. See components/motion/reveal.tsx. */
+[data-reveal] {
+  transition: transform 650ms var(--ease-brand) var(--reveal-delay, 0s);
+}
+
+[data-reveal='pending'] {
+  transform: translate3d(0, 20px, 0);
+}
+
+/* Magnetic CTA: the pointer handler sets --mx/--my/--ms; this is the spring. */
+.magnetic {
+  display: inline-flex;
+  transform: translate3d(var(--mx, 0), var(--my, 0), 0) scale(var(--ms, 1));
+  transition: transform 450ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }

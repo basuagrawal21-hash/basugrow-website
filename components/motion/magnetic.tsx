@@ -1,14 +1,15 @@
 'use client';
 
 import { useRef, type ReactNode } from 'react';
-import { motion, useMotionValue, useReducedMotion, useSpring } from 'motion/react';
 
 const RADIUS = 90;
 const PULL = 8;
 
 /**
  * Primary CTAs lean toward the cursor within a 90px radius and spring back.
- * Transform only — no layout properties are touched.
+ * Transform only — no layout properties are touched. The pointer handler
+ * writes three custom properties; the spring is a CSS transition with a small
+ * overshoot (.magnetic in globals.css), so no animation library is loaded.
  */
 export function Magnetic({
   children,
@@ -20,56 +21,41 @@ export function Magnetic({
   strength?: number;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const reduced = useReducedMotion();
 
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const scale = useMotionValue(1);
-
-  const spring = { stiffness: 260, damping: 20, mass: 0.6 };
-  const sx = useSpring(x, spring);
-  const sy = useSpring(y, spring);
-  const sScale = useSpring(scale, spring);
-
-  if (reduced) {
-    return <span className={className}>{children}</span>;
-  }
+  const set = (x: number, y: number, s: number) => {
+    const node = ref.current;
+    if (!node) return;
+    node.style.setProperty('--mx', `${x}px`);
+    node.style.setProperty('--my', `${y}px`);
+    node.style.setProperty('--ms', `${s}`);
+  };
 
   const onMove = (event: React.PointerEvent<HTMLSpanElement>) => {
     const node = ref.current;
-    if (!node) return;
+    if (!node || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     const rect = node.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    const dx = event.clientX - cx;
-    const dy = event.clientY - cy;
+    const dx = event.clientX - (rect.left + rect.width / 2);
+    const dy = event.clientY - (rect.top + rect.height / 2);
     const distance = Math.hypot(dx, dy);
 
     if (distance > RADIUS + Math.max(rect.width, rect.height) / 2) return;
 
     const pull = Math.min(1, RADIUS / Math.max(distance, 1));
-    x.set((dx / RADIUS) * strength * pull);
-    y.set((dy / RADIUS) * strength * pull);
-    scale.set(1.03);
+    set((dx / RADIUS) * strength * pull, (dy / RADIUS) * strength * pull, 1.03);
   };
 
-  const reset = () => {
-    x.set(0);
-    y.set(0);
-    scale.set(1);
-  };
+  const reset = () => set(0, 0, 1);
 
   return (
-    <motion.span
+    <span
       ref={ref}
-      className={className}
-      style={{ x: sx, y: sy, scale: sScale, display: 'inline-flex' }}
+      className={className ? `magnetic ${className}` : 'magnetic'}
       onPointerMove={onMove}
       onPointerLeave={reset}
       onPointerCancel={reset}
     >
       {children}
-    </motion.span>
+    </span>
   );
 }

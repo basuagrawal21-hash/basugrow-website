@@ -1,6 +1,6 @@
 import { Section } from '@/components/ui/section';
 import { Marquee } from '@/components/motion/marquee';
-import { CountUp } from '@/components/motion/count-up';
+import { StatFigure } from '@/components/motion/stat-figure';
 import { clientLogos, clientCategories, trustStats } from '@/content/stats';
 
 /**
@@ -35,7 +35,7 @@ export function TrustBar() {
             <dt className="sr-only">{stat.label}</dt>
             <dd>
               <p className="text-ink text-[length:var(--text-xl)] leading-none font-extrabold">
-                <CountUp to={stat.value} prefix={stat.prefix} suffix={stat.suffix} />
+                <StatFigure value={stat.value} prefix={stat.prefix} suffix={stat.suffix} />
               </p>
               <p className="text-ink mt-2.5 text-[0.9375rem] font-medium">{stat.label}</p>
               <p className="text-slate mt-0.5 text-[0.875rem]">
@@ -43,7 +43,7 @@ export function TrustBar() {
                 {!trustStats.isVerified && (
                   <>
                     {' · '}
-                    <span className="text-slate/80 italic">sample</span>
+                    <span className="italic">sample</span>
                   </>
                 )}
               </p>
@@ -53,7 +53,7 @@ export function TrustBar() {
       </dl>
 
       {!trustStats.isVerified && (
-        <p className="text-slate/80 mt-8 text-[0.8125rem]">
+        <p className="text-slate mt-8 text-[0.8125rem]">
           These figures are illustrative while we finish putting the real reporting together. We
           would rather show you a placeholder than a number we cannot evidence.
         </p>
